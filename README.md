@@ -1,2 +1,4 @@
-# dicca__python_course
-Python for Scientists course | DICCA - UNIGE 
+# Python for Scientists course | DICCA - UNIGE 
+
+June 21-23, 2021
+Andrea Lira Loarca
