@@ -14,3 +14,4 @@ dependencies:
   - bokeh
   - dask
   - xarray
+  - datetime
