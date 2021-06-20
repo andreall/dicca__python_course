@@ -4,3 +4,5 @@ This repository includes the material given on the "Python for Scientists" cours
 
 Andrea Lira Loarca
 andrea.lira.loarca@unige.it
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/andreall/python_course-dicca.git/HEAD)
