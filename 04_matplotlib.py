@@ -94,20 +94,20 @@ plt.plot(X, S)
 
 # ## Exercise
 
-# We start off by loading the ``data/munich_temperatures_average_with_bad_data.txt`` file which we encountered in the Numpy lecture:
+# We start off by loading the ``data/SIMAR_gaps.txt`` file which we encountered in the Numpy lecture:
 
 # In[10]:
 
 
 # The following code reads in the file and removes bad values
 import numpy as np
-date, temperature = np.loadtxt('data/munich_temperatures_average_with_bad_data.txt', unpack=True)
-keep = np.abs(temperature) < 90
-date = date[keep]
-temperature = temperature[keep]
+data = np.loadtxt('data/SIMAR_gaps.txt', skiprows=1)
+Hm0 = data[:, 4]
+keep = Hm0 > -99.9
+data = data[keep]
 
 
-# Now that the data has been read in, plot the temperature against time:
+# Now that the data has been read in, plot the Hm0:
 
 # In[11]:
 
@@ -115,29 +115,9 @@ temperature = temperature[keep]
 # your solution here
 
 
-# Next, try plotting the data against the fraction of the year (all years on top of each other). Note that you can use the ``%`` (modulo) operator to find the fractional part of the dates:
-
-# In[12]:
-
-
-# your solution here
-
-
 # ## Customizing plots
 
-# In[13]:
-
-
-x = np.random.random(100)
-y = np.random.random(100)
-plt.scatter(x, y)
-plt.xlabel('x values')
-plt.ylabel('y values')
-plt.xlim(0., 1.)
-plt.ylim(0., 1.)
-
-
-# In[14]:
+# In[12]:
 
 
 # Create a figure of size 8x6 inches, 80 dots per inch
@@ -167,12 +147,12 @@ plt.ylim(-1.0, 1.0)
 # Set y ticks
 plt.yticks(np.linspace(-1, 1, 5))
 
-# Limits
-plt.xlim(X.min() * 1.1, X.max() * 1.1)
-plt.ylim(C.min() * 1.1, C.max() * 1.1)
+
+plt.xlabel('x values')
+plt.ylabel('y values')
 
 
-# In[15]:
+# In[13]:
 
 
 plt.plot(X, C, color="blue", linewidth=2.5, linestyle="-", label="cosine")
@@ -189,12 +169,42 @@ plt.legend(loc='upper left')
 
 # While the ``plot`` function can be used to show scatter plots, it is mainly used for line plots, and the ``scatter`` function is more often used for scatter plots, because it allows more fine control of the markers:
 
-# In[16]:
+# In[14]:
 
 
 x = np.random.random(100)
 y = np.random.random(100)
 plt.scatter(x, y)
+
+
+# ### Errorbar
+
+# In[15]:
+
+
+###  generate some random data
+xdata2 = np.arange(15)
+ydata2 = np.random.randn(15)
+yerrors = np.random.randn(15)
+
+###  initialize the figure
+fig, ax = plt.subplots()
+
+ax.errorbar(xdata2, ydata2, yerr=yerrors)
+
+
+# In[16]:
+
+
+plt.errorbar(xdata2, ydata2, yerr=yerrors, ls='',         # no lines connecting points
+                                               marker='*',    # circular plot symbols
+                                               ms=20,         # marker size
+                                               mfc='r',       # marker face color
+                                               mew=2,         # marker edge width
+                                               mec='k',       # marker edge color
+                                               elinewidth=2,  # error line width
+                                               ecolor='gray', # error color
+                                               capsize=6)     # error hat sizex
 
 
 # ### Histograms
@@ -214,11 +224,17 @@ h = plt.hist(v)  # we do h= to capture the output of the function, but we don't 
 h = plt.hist(v, range=[-5., 15.], bins=100)
 
 
+# In[19]:
+
+
+h = plt.hist(v, orientation='horizontal')
+
+
 # ### Images
 
 # You can also show two-dimensional arrays with the ``imshow`` function:
 
-# In[19]:
+# In[20]:
 
 
 array = np.random.random((64, 64))
@@ -227,7 +243,7 @@ plt.imshow(array)
 
 # And the colormap can be changed:
 
-# In[20]:
+# In[21]:
 
 
 plt.imshow(array, cmap=plt.cm.gist_heat)
@@ -235,7 +251,7 @@ plt.imshow(array, cmap=plt.cm.gist_heat)
 
 # ### Contour
 
-# In[21]:
+# In[22]:
 
 
 def f(x,y):
@@ -259,7 +275,7 @@ plt.show()
 
 # ### Polar plots
 
-# In[22]:
+# In[23]:
 
 
 ax = plt.axes([0.025, 0.025, 0.95, 0.95], polar=True)
@@ -267,7 +283,7 @@ ax = plt.axes([0.025, 0.025, 0.95, 0.95], polar=True)
 N = 20
 theta = np.arange(0.0, 2 * np.pi, 2 * np.pi / N)
 radii = 10 * np.random.rand(N)
-width = np.pi / 4 * np.random.rand(N)
+width = np.pi / 4* np.random.rand(N)
 bars = plt.bar(theta, radii, width=width, bottom=0.0)
 
 for r,bar in zip(radii, bars):
@@ -279,11 +295,61 @@ ax.set_yticklabels([])
 plt.show()
 
 
+# ### Multiplots
+
+# In[24]:
+
+
+# First create some toy data:
+x = np.linspace(0, 2*np.pi, 400)
+y = np.sin(x**2)
+
+# Create just a figure and only one subplot
+fig, ax = plt.subplots()
+ax.plot(x, y)
+ax.set_title('Simple plot')
+
+
+# In[25]:
+
+
+# Create two subplots and unpack the output array immediately
+f, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
+ax1.plot(x, y)
+ax1.set_title('Sharing Y axis')
+ax2.scatter(x, y)
+
+
+# In[26]:
+
+
+# Create four polar axes and access them through the returned array
+fig, axs = plt.subplots(2, 2, subplot_kw=dict(projection="polar"))
+axs[0, 0].plot(x, y)
+axs[1, 1].scatter(x, y)
+
+
+# In[27]:
+
+
+# Share a X axis with each column of subplots
+plt.subplots(2, 2, sharex='col')
+
+# Share a Y axis with each row of subplots
+plt.subplots(2, 2, sharey='row')
+
+# Share both X and Y axes with all subplots
+plt.subplots(2, 2, sharex='all', sharey='all')
+
+# Note that this is the same as
+plt.subplots(2, 2, sharex=True, sharey=True)
+
+
 # ## Saving plots to files
 
 # To save a plot to a file, you can do for example:
 
-# In[23]:
+# In[28]:
 
 
 plt.savefig('my_plot.png')
@@ -325,9 +391,9 @@ plt.savefig('my_plot.png')
 
 # ## Exercise
 
-# Use Numpy to generate 10000 random values following a Gaussian/Normal distribution, and make a histogram. Try changing the number of bins to properly see the Gaussian. Try overplotting a Gaussian function on top of it using a colored line, and adjust the normalization so that the histogram and the line are aligned.
+# Use Numpy to make the histogram of Hm0 and make a histogram. Try changing the number of bins and try plotting the CDF on top of it.
 
-# In[24]:
+# In[29]:
 
 
 
