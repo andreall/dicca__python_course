@@ -15,5 +15,3 @@ dependencies:
   - dask
   - xarray
   - datetime
-  - time
-  - math
