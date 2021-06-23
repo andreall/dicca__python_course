@@ -518,7 +518,7 @@ Y.mean()
 stats.ttest_1samp(Y.rvs(size=1000), Y.mean())
 
 
-# ## Statistics
+# ## Signal
 
 # The `scipy.signal` module contains a large number of signal analysis functions. For a complete documentation of its features, see https://docs.scipy.org/doc/scipy/reference/signal.html.
 
