@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -163,7 +162,7 @@ for n in range(3):
 print('And now we are done.')
 
 
-# In[69]:
+# In[ ]:
 
 
 n = [2, 3, 5, 7]
@@ -173,14 +172,14 @@ for e in n:
 
 # > Please avoid Matlab-like for statements with range
 
-# In[70]:
+# In[ ]:
 
 
 for e in range(len(n)):
     print(n[e])
 
 
-# In[71]:
+# In[ ]:
 
 
 m = range(5)  # m = [0, 1, 2, 3, 4]
@@ -188,7 +187,7 @@ for _ in m:
     print("hola")
 
 
-# In[72]:
+# In[ ]:
 
 
 for index, value in enumerate(n):
@@ -208,7 +207,7 @@ else:
     print("n is not greater than 2!")
 
 
-# In[68]:
+# In[ ]:
 
 
 x = 15
@@ -232,7 +231,7 @@ print("Hello world")
 n > 2
 
 
-# In[42]:
+# In[ ]:
 
 
 result = 4 < 5
@@ -273,6 +272,12 @@ print(m < 3)
 # In[ ]:
 
 
+m = 4
+
+
+# In[ ]:
+
+
 type(m)
 
 
@@ -284,6 +289,24 @@ type(m)
 
 
 type(0.1)
+
+
+# In[ ]:
+
+
+n = int(3.5 / 2)
+
+
+# In[ ]:
+
+
+n
+
+
+# In[ ]:
+
+
+type(n)
 
 
 # or in scientific notation:
@@ -314,120 +337,172 @@ type('orange')
 
 # <center> <img src="img/list-indexing.png" width="1600"/> </center>
 
-# In[24]:
+# In[ ]:
 
 
-message = "what do you like?"
+p = 'orange'
+
+
+# In[ ]:
+
+
+p[-1]
+
+
+# In[ ]:
+
+
+message = "what do_you-like?"
 print(message)
 
 
 # You can use either single quotes (``'``), double quotes (``"``), or triple quotes (``'''`` or ``"""``) to enclose a string (the last one is used for multi-line strings). To include single or double quotes inside a string, you can either use the opposite quote to enclose the string:
 
-# In[25]:
+# In[ ]:
 
 
 response = "I'm"
 print(response)
 
 
-# In[26]:
+# In[ ]:
 
 
-response = '"hello"'
+response = 'hello'
 print(response)
 
 
-# In[27]:
+# In[ ]:
 
 
 # length of string
 print(len(response))
 
 
-# In[28]:
+# In[ ]:
 
 
 # Make upper-case. See also str.lower()
 print(response.upper())
 
 
-# In[29]:
+# In[ ]:
 
 
 # Capitalize. See also str.title()
 print(message.capitalize())
 
 
-# In[30]:
+# In[ ]:
 
 
 s = "Spam egg spam spam"
-s.index('egg ')  # An integer giving the position of the sub-string
+s.index(' e')  # An integer giving the position of the sub-string
 
 
-# In[31]:
+# In[ ]:
 
 
-s.split()
+s2 = s.split()
 
 
-# In[32]:
+# In[ ]:
+
+
+s2[2].split('p')
+
+
+# In[ ]:
 
 
 s2 = "Spam-egg-spam_spam"
-s2.split()
+s2.split('_')
 
 
-# In[33]:
+# In[ ]:
 
 
 s3 = s2.split('-')
 s3
 
 
-# In[34]:
+# In[ ]:
 
 
-' '.join(s3)
+type(s3)
 
 
-# In[35]:
+# In[ ]:
+
+
+" ".join(['hola', 'adios'])
+
+
+# In[ ]:
+
+
+vv = 5.0000045
+
+
+# In[ ]:
 
 
 # concatenation with +
-print(message + response)
+print(message + ' ' + response + ' ' +str(vv))
 
 
-# In[36]:
+# ### FORMAT
+# 
+# a = f'{message} {response} {vv}'
+# 
+# a = '{} {} {}'.format(message, response, vv)
+# 
+# a = '{0} {2} {1}'.format(message, response, vv)
+
+# In[ ]:
 
 
-# concatenation with +
-print(f'{message} {response}')
+
+# concatenation with f
+print(f'{message} {response} {vv:.2f}')
 
 
-# In[37]:
+# In[ ]:
 
 
-# concatenation with +
-print('{0} {1}'.format(message, response))
+f'{5:03d}'
+
+
+# In[ ]:
+
+
+# concatenation with format
+print('{} {} {}'.format(message, response, vv))
 print('{1} -- {0} {1}'.format(message, response))
 
 
-# In[38]:
+# In[ ]:
 
 
 # multiplication is multiple concatenation
 print(5 * response)
 
 
-# In[39]:
+# In[ ]:
+
+
+message
+
+
+# In[ ]:
 
 
 # Access individual characters (zero-based indexing)
-print(message[0])
+#[first:end:step]
+print(message[:8:2])
 
 
-# In[40]:
+# In[ ]:
 
 
 cadena1 = "cool"
@@ -437,12 +512,43 @@ print(cadena1[::-1])
 # ## Exercise 
 # Given a string such as the one below, make a new string that does not contain the word ``egg``:
 
-# In[41]:
+# In[ ]:
 
 
 a = "Hello, egg world!"
 
 # enter your solution here
+# "Hello world!"
+
+
+# In[ ]:
+
+
+s = a.split(' ')
+
+
+# In[ ]:
+
+
+print(s[0] + ' ' + s[2])
+
+
+# In[ ]:
+
+
+print('{0} {2}'.format(s[0], s[1], s[2]))
+
+
+# In[ ]:
+
+
+print(' '.join(a.split(', egg ')))
+
+
+# In[ ]:
+
+
+print(a[0:7] + a[11:17])
 
 
 # ## Built-In Data Structures
@@ -463,13 +569,28 @@ a = "Hello, egg world!"
 mylist = [0, 1, 1, 2, 3, 5, 8]
 
 
+# In[ ]:
+
+
+len(mylist)
+
+
+# In[ ]:
+
+
+mylist[-7]
+
+
 # Lists are useful for lots of reasons including iteration:
 
 # In[ ]:
 
 
-for number in mylist:
-    print(number)
+for pos, number in enumerate(mylist):
+    print(f'{pos + 1} - {number + 4.5}')
+    
+# for pos in range(len(mylist)):
+#    print(mylist[pos])
 
 
 # Lists do **not** have to contain all identical types:
@@ -479,7 +600,25 @@ for number in mylist:
 
 myweirdlist = [0, 1, 1, "apple", 4e7]
 for item in myweirdlist:
-    print(type(item))
+    print(f'{item} - {type(item)}')
+
+
+# In[ ]:
+
+
+ll = [['a', 'be ready', 'c'], [23, 45]]
+
+
+# In[ ]:
+
+
+ll[0][1].split()[1][3]
+
+
+# In[ ]:
+
+
+ll[0][1].split()[1][2:3]
 
 
 # This list contains a mix of `int`, `float`, and `str` (character string).
@@ -503,42 +642,69 @@ squares = [i ** 2 for i in range(11)]
 squares
 
 
-# In[43]:
+# In[ ]:
 
 
-lst = [2, 3, 5, 7]
+squares = list()
+for i in range(11):
+    squares.append(i**2)
+squares
 
 
-# In[45]:
+# In[ ]:
 
 
-# Length of a list
-print(len(lst))
+li = [2, 3, 5, 7]
 
 
-# In[46]:
+# In[ ]:
 
 
 # Change value of list
 li[1] = -2.2
 
 
-# In[47]:
+# In[ ]:
+
+
+li
+
+
+# In[ ]:
 
 
 # Append a value to the end
-lst.append(11)
-print(lst)
+li.append(11)
+print(li)
 
 
-# In[48]:
+# In[ ]:
 
 
 # Addition concatenates lists
 print(lst + [13, 17, 19])
 
 
-# In[49]:
+# In[ ]:
+
+
+lst.remove(5)
+lst
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
 
 
 # sort() method sorts in-place
@@ -547,58 +713,64 @@ lst.sort()
 print(lst)
 
 
-# In[50]:
+# In[ ]:
 
 
 lst = [1, "two", 3.14, [0, 3, 5]]
 print(lst)
 
 
+# In[ ]:
+
+
+type(lst[3])
+
+
 # #### List indexing and slicing
 
-# In[51]:
+# In[ ]:
 
 
 lst = [2, 3, 5, 7, 11]
 
 
-# In[52]:
+# In[ ]:
 
 
 print(lst[0])
 
 
-# In[53]:
+# In[ ]:
 
 
 print(lst[1])
 
 
-# In[54]:
+# In[ ]:
 
 
 print(lst[-1])
 
 
-# In[55]:
+# In[ ]:
 
 
 print(lst[0:3])
 
 
-# In[56]:
+# In[ ]:
 
 
 print(lst[:3])
 
 
-# In[57]:
+# In[ ]:
 
 
-print(lst[::2])  # equivalent to l[0:len(l):2]
+print(lst[::-2])  # [start:end:step] equivalent to l[0:len(l):2]
 
 
-# In[58]:
+# In[ ]:
 
 
 lst[0] = 100
@@ -613,11 +785,17 @@ print(lst)
 
 
 mypet = {
-    "name": "Fluffy",
-    "species": "cat",
-    "age": 4,
+    "name": ["Fluffy", 'Fido'],
+    "species": ["cat", 'dog'],
+    "age": [4, 5],
 }
 type(mypet)
+
+
+# In[ ]:
+
+
+mypet
 
 
 # We can then access items in the dictionary by label using square brackets:
@@ -633,12 +811,12 @@ mypet["species"]
 # In[ ]:
 
 
-for key in mypet:
+for key, values in mypet.items():
     print("The key is:", key)
-    print("The value is:", mypet[key])
+    print("The value is:", values)
 
 
-# In[61]:
+# In[ ]:
 
 
 # Set a new key:value pair
@@ -660,6 +838,75 @@ print(mypet)
 # - Check if Marie Curie is in our dictonary
 # - Get Albert Einstein's birthday
 
+# In[ ]:
+
+
+info = {'Albert Einstein': '03/14/1879',
+        'Benjamin Franklin': '01/17/1706',
+        'Ada Lovelace': '12/10/1815',
+        'Marie Curie': '07/11/1867',
+        'Rowan Atkinson': '01/6/1955',
+        'Rosalind Franklin': '25/07/1920'}
+
+info2 = {'name': ['Albert Einstein', 'Benjamin Franklin', 'Ada Lovelace', 'Marie Curie', 'Rowan Atkinson', 
+                  'Rosalind Franklin'],
+         'birthday': ['03/14/1879', '01/17/1706', '12/10/1815', '07/11/1867', '01/6/1955','25/07/1920']}
+
+
+# In[ ]:
+
+
+# Check if Marie Curie is in dictionary
+a = 'Albert Einstein'
+
+if a in info:    
+    #ksjklajkld
+    print(info)
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+print(a in info)
+
+
+# In[ ]:
+
+
+info2['name'].index('Marie Curie')
+
+
+# In[ ]:
+
+
+# Einstein's birthday
+'03/14/1879'
+
+
+# In[ ]:
+
+
+info['Albert Einstein']
+
+
+# In[ ]:
+
+
+pos_e = info2['name'].index('Albert Einstein')
+
+
+# In[ ]:
+
+
+info2['birthday'][pos_e]
+
+
 # ## Arrays of numbers with `numpy`
 # 
 # The vast majority of scientific Python code makes use of *packages* that extend the base language in many useful ways.
@@ -672,6 +919,12 @@ print(mypet)
 
 
 import numpy as np
+
+
+# In[ ]:
+
+
+
 
 
 # Now all our calls to `numpy` functions will be preceeded by `np.`
@@ -702,6 +955,18 @@ type(numbers)
 numbers + 1
 
 
+# In[ ]:
+
+
+list = [3, 4, 5]
+
+
+# In[ ]:
+
+
+np.asarray(list) + 1
+
+
 # Sum up all the numbers:
 
 # In[ ]:
@@ -724,27 +989,27 @@ np.sum(numbers)
 # | ``-a``       | Negation       | The negative of ``a``                                  |
 # | ``+a``       | Unary plus     | ``a`` unchanged (rarely used)                          |
 
-# In[13]:
+# In[ ]:
 
 
 print(22 / 2 == 10 + 1)
 
 
-# In[14]:
+# In[ ]:
 
 
 # 25 is even
 print(25 % 2 == 0)
 
 
-# In[15]:
+# In[ ]:
 
 
 # 66 is odd
 print(66 % 2 == 0)
 
 
-# In[16]:
+# In[ ]:
 
 
 # check if a is between 15 and 30
@@ -754,20 +1019,22 @@ print(15 < a < 30)
 
 # ### Boolean Operations
 
-# In[17]:
+# In[ ]:
 
 
 x = 4
-print((x < 6) and (x > 2))
+print(((x < 6) and (x > 2)) and (x == 5))
+# and -> &
 
 
-# In[18]:
+# In[ ]:
 
 
 print((x > 10) or (x % 2 == 0))
+# or -> |
 
 
-# In[19]:
+# In[ ]:
 
 
 print(not (x < 6))
@@ -780,13 +1047,13 @@ print(not (x < 6))
 # | ``a in b``    | True if ``a`` is a member of ``b``                |
 # | ``a not in b``| True if ``a`` is not a member of ``b``            |
 
-# In[20]:
+# In[ ]:
 
 
 print(1 in [1, 2, 3])
 
 
-# In[21]:
+# In[ ]:
 
 
 print(2 not in [1, 2, 3])
@@ -796,23 +1063,40 @@ print(2 not in [1, 2, 3])
 
 # ### Defining Functions
 
-# In[74]:
+# In[ ]:
 
 
 import time
 
+# def NAME(input1, input 2):
+#     aaaaa
+#     bbbbb
+
+#     return output1, output2   
+
+# out = NAME(inp1, inp2)
+# out = [out1, out2]
 
 def header():
     text = "This is a function"
     text += ". Copyright " + time.strftime("%d-%m-%Y")
 
-    return text
+    return text, text 
 
 
-print(header())
+out1, _ = header()
+
+#print(header())
+print(out1)
 
 
-# In[75]:
+# In[ ]:
+
+
+
+
+
+# In[ ]:
 
 
 def header_v2(author):
@@ -826,15 +1110,21 @@ def header_v2(author):
 print(header_v2("Andrea Lira Loarca"))
 
 
+# In[ ]:
+
+
+
+
+
 # > Atenttion to the string format
 
-# In[76]:
+# In[ ]:
 
 
-print(header_v2("Gabriella Ruffini"))
+print(header_v2('Gabriella Ruffini'))
 
 
-# In[77]:
+# In[ ]:
 
 
 def fibonacci(n):
@@ -849,21 +1139,21 @@ def fibonacci(n):
     return l
 
 
-# In[78]:
+# In[ ]:
 
 
 print(fibonacci(10))
 
 
-# In[79]:
+# In[ ]:
 
 
-print(fibonacci(3))
+print(fibonacci(6))
 
 
 # ### Default Argument Values
 
-# In[80]:
+# In[ ]:
 
 
 def fibonacci(n, start=0):
@@ -879,31 +1169,31 @@ def fibonacci(n, start=0):
     return fib
 
 
-# In[81]:
+# In[ ]:
 
 
 print(fibonacci(10))
 
 
-# In[82]:
+# In[ ]:
 
 
 print(fibonacci(10, 5))
 
 
-# In[83]:
+# In[ ]:
 
 
 ## Keyword arguments
 
 
-# In[84]:
+# In[ ]:
 
 
-print(fibonacci(start=5, n=10))
+print(fibonacci(start=5, n=20))
 
 
-# In[85]:
+# In[ ]:
 
 
 from datetime import datetime, timedelta
@@ -913,6 +1203,12 @@ dt1 = datetime(2005, 7, 14, 12, 30)
 dt2 = dt1 + timedelta(hours=5)
 
 print(dt2)
+
+
+# In[ ]:
+
+
+dt1
 
 
 # **timedelta**(`[days[, seconds[, microseconds[, milliseconds[, minutes[, hours[, weeks]]]]]]]`)
@@ -929,7 +1225,7 @@ print(dt2)
 # * **All functions should have a docstring**.
 # * This allows to inspect these comments at run time, for instance as an **interactive help system**, or **export them as HTML, LaTeX, PDF** or other formats.
 
-# In[86]:
+# In[ ]:
 
 
 def fibonacci(n, start=0):
@@ -960,36 +1256,26 @@ def fibonacci(n, start=0):
 
 # #### Explicit module import by alias
 
-# In[87]:
+# In[ ]:
 
 
 import numpy as np
+from numpy import linspace
 
-
-# #### Explicit import of module contents
-
-# In[88]:
-
-
-from scipy.stats import norm
-
-
-# ### Importing from Third-Party Modules
-
-# The best way to import libraries is included in their official help
-# 
-# ```python
-# import math
-# import numpy as np
-# from scipy import linalg, optimize
-# import pandas as pd
-# import matplotlib as mpl
-# import matplotlib.pyplot as plt
-# import sympy
-# ```
 
 # In[ ]:
 
 
+linspace(0, 5, 10)
 
 
+# #### Explicit import of module contents
+
+# In[ ]:
+
+
+import scipy.stats as st
+from scipy.stats import norm, genpareto
+
+
+# ### Importing from Third-Party Modules
