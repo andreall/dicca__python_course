@@ -131,3 +131,7 @@ dmypy.json
 /data_ex
 /01_introduction_python.key
 /old
+/data/CESM2_grid_variables.nc
+/data/CESM2_sst_data.nc
+/data/NARR_19930313_0000.nc
+/exercises
