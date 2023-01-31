@@ -131,3 +131,7 @@ dmypy.json
 /data_ex
 /01_introduction_python.key
 /old
+/certificate.docx
+/data/.DS_Store
+/data/CESM2_grid_variables.nc
+/exercises
