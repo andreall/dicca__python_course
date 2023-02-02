@@ -1043,12 +1043,24 @@ print(25 % 2 != 0)
 print(66 % 2 == 0)
 
 
-# In[18]:
+# In[1]:
 
 
 # check if a is between 15 and 30
 a = 25
 print(15 < a < 30)
+
+
+# In[3]:
+
+
+a = [2, 3, 4]
+
+
+# In[5]:
+
+
+a + [1]
 
 
 # ## Arrays of numbers with `numpy`
@@ -1059,7 +1071,7 @@ print(15 < a < 30)
 # 
 # Using any package requires an `import` statement, and (optionally) a nickname to be used locally, denoted by the keyword `as`:
 
-# In[4]:
+# In[16]:
 
 
 import numpy as np
@@ -1069,7 +1081,7 @@ import numpy as np
 
 # Create a linearly space array of numbers:
 
-# In[5]:
+# In[17]:
 
 
 # linspace() takes 3 arguments: start, end, total number of points
@@ -1079,7 +1091,7 @@ numbers
 
 # We've just created a new type of object defined by numpy:
 
-# In[6]:
+# In[18]:
 
 
 type(numbers)
@@ -1087,20 +1099,19 @@ type(numbers)
 
 # Do some arithmetic on that array:
 
-# In[8]:
+# In[21]:
 
 
-numbers + 1
+numbers + [1]
 
 
-# In[2]:
+# In[22]:
 
 
 list = [3, 4, 5]
-import numpy as np
 
 
-# In[6]:
+# In[23]:
 
 
 list + list
@@ -1121,14 +1132,29 @@ np.sum(numbers)
 
 x = 4
 print(((x < 6) and (x > 2)) and (x == 5))
-# and -> &
+# and (if, while) -> & (numerical operations in numpy)
 
 
-# In[25]:
+# In[24]:
 
 
 print((x > 10) or (x % 2 == 0))
-# or -> |
+# or (if, while) -> | (numerical operation)
+
+
+# In[26]:
+
+
+x = 5
+if x != 0:
+    print('score')
+
+
+# In[27]:
+
+
+if not x == 0:
+    print('score')
 
 
 # In[19]:
@@ -1144,13 +1170,13 @@ print(not (x < 6))
 # | ``a in b``    | True if ``a`` is a member of ``b``                |
 # | ``a not in b``| True if ``a`` is not a member of ``b``            |
 
-# In[26]:
+# In[28]:
 
 
 print(1 in [1, 2, 3])
 
 
-# In[27]:
+# In[29]:
 
 
 print(2 not in [1, 2, 3])
@@ -1160,7 +1186,7 @@ print(2 not in [1, 2, 3])
 
 # ### Defining Functions
 
-# In[33]:
+# In[31]:
 
 
 import time
@@ -1173,6 +1199,8 @@ import time
 
 # out = NAME(inp1, inp2)
 # out = [out1, out2]
+# out1, out2 = NAME(inp1, inp2)
+# _, out2 = NAME(inp1, inp2)
 
 def header():
     text = "This is a function"
@@ -1181,19 +1209,35 @@ def header():
     return text, text 
 
 
-out1, _ = header()
+out1, out2 = header()
 
 #print(header())
 print(out1)
+print(out2)
+
+
+# In[32]:
+
+
+#aux.py
+import numpy as np
+
+def sine(x):
+    b = np.sin(x)
+    
+    return b
 
 
 # In[ ]:
 
 
+# main.py
+from aux import sine
+
+c = sine(4)
 
 
-
-# In[35]:
+# In[33]:
 
 
 def header_v2(author):
@@ -1225,18 +1269,21 @@ def fibonacci(n):
 # In[40]:
 
 
-print(fibonacci(10))
+fibonacci()
 
 
 # ### Default Argument Values
 
-# In[45]:
+# In[49]:
 
 
-def fibonacci(n, start=0):
+import numpy as np
+def fibonacci2(n, start1=0, start2=1):
     fib = []
     a = 0
     b = 1
+    start = np.min([start1, start2])
+    print(start)
     while len(fib) < n:
         if a >= start:
             fib.append(a)
@@ -1246,10 +1293,10 @@ def fibonacci(n, start=0):
     return fib
 
 
-# In[46]:
+# In[60]:
 
 
-print(fibonacci(10))
+print(fibonacci2(10, start2=6, start1=3))
 
 
 # In[47]:
@@ -1335,55 +1382,36 @@ from scipy.stats import norm, genpareto
 
 # ### Paths
 # 
-# os
+# ## os
 # 
-# pathlib
+# ## pathlib
 
-# In[8]:
+# In[63]:
 
 
 import os
 
-data = np.loadtxt(os.path.join('data', 'columns.txt'))
+dir_fn = os.path.join('..', '..', 'data', 'columns.txt')
+print(dir_fn)
+
+data = np.loadtxt(dir_fn)
 data
 
 
-# In[ ]:
+# In[78]:
 
 
 from pathlib import Path
 
 dir_data = Path('data')
-data = np.loadtxt(dir_data / 'columns.txt', delimiter='*')
-data
+dir_fn = dir_data / 'columns' / 'second_folder'
+
+p_file = Path('__file__').resolve()
+fn = p_file.parents[1] / 'prova.txt'
 
 
-# In[ ]:
+# In[80]:
 
 
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
+fn.suffix
 
