@@ -1326,9 +1326,64 @@ linspace(0, 5, 10)
 
 # #### Explicit import of module contents
 
-# In[59]:
+# In[7]:
 
 
 import scipy.stats as st
 from scipy.stats import norm, genpareto
+
+
+# ### Paths
+# 
+# os
+# 
+# pathlib
+
+# In[8]:
+
+
+import os
+
+data = np.loadtxt(os.path.join('data', 'columns.txt'))
+data
+
+
+# In[ ]:
+
+
+from pathlib import Path
+
+dir_data = Path('data')
+data = np.loadtxt(dir_data / 'columns.txt', delimiter='*')
+data
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
 
