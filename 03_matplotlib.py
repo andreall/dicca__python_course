@@ -5,7 +5,7 @@
 
 # The **Matplotlib** package can be used to make scientific-grade plots. You can import it with:
 
-# In[2]:
+# In[1]:
 
 
 import matplotlib.pyplot as plt
@@ -41,15 +41,21 @@ plt.plot([1,2,3,6,4,2,3,4])
 
 # However, we can instead specify the x values:
 
-# In[3]:
+# In[4]:
 
 
 plt.plot([3.3, 4.4, 4.5, 6.5], [3., 5., 6., 7.])
 
 
+# In[ ]:
+
+
+# plt.show()
+
+
 # Matplotlib can take Numpy arrays, so we can do for example:
 
-# In[4]:
+# In[5]:
 
 
 import numpy as np
@@ -60,37 +66,38 @@ plt.plot(x, y)
 
 # The ``plot`` function is actually quite complex, and for example can take arguments specifying the type of point, the color of the line, and the width of the line:
 
-# In[16]:
+# In[11]:
 
 
-plt.plot(x, y, marker='o', color='green', linewidth=0)
+plt.plot(x, y, marker='o', color='green', linewidth=4, linestyle='--')
 
 
 # plt.plot(x, y, 'o', color='k')
 
 # The line can be hidden with:
 
-# In[19]:
+# In[14]:
 
 
 plt.plot(x, y,linewidth=0, color='green',  marker='+')
+plt.plot(x+1, y,linewidth=0, color='red',  marker='o')
 
 
 # If you are interested, you can specify some of these attributes with a special syntax, which you can read up more about in the Matplotlib documentation:
 
-# In[8]:
+# In[12]:
 
 
 plt.plot(x, y, 'go')  # means green and circles
 
 
-# In[25]:
+# In[16]:
 
 
 X = np.linspace(-np.pi, np.pi, 256)
 C, S = np.cos(X), np.sin(X)
 
-plt.plot(X, C)
+#plt.plot(X, C)
 
 plt.figure()
 plt.plot(X, S)
@@ -98,15 +105,9 @@ plt.plot(X, S)
 fig = plt.figure()
 ax = fig.axes
 
-fig, ax = plt.subplots(1, 2)
-ax[1].plot(X, S)
+fig, ax = plt.subplots()
+ax.plot(X, S)
 
-
-# ## Exercise
-
-# We start off by loading the ``data/SIMAR_gaps.txt`` file which we encountered in the Numpy lecture:
-
-# Now that the data has been read in, plot the Hm0:
 
 # ## Customizing plots
 
@@ -165,9 +166,13 @@ h2 = plt.plot(X, S, color="red",  linewidth=2.5, linestyle="-")
 plt.legend(['cosine', 'sine'], loc='lower center', ncol=2, frameon=False) # upper center lower / left right
 
 
-# ## Other types of plots
+# ## Exercise
+# 
+# Start off by loading the ``data/SIMAR_gaps.txt`` (Numpy lecture):
+# 1. Plot Hm0 (complete series)
+# 2. Plot Hm0 and, on top, plot the markers of the annual maximum values
 
-# <center> <img src="img/matplotlib_ex.png" width="1600"/> </center>
+# ## Other types of plots
 
 # ### Scatter plots
 
@@ -418,10 +423,6 @@ fig.savefig('dir_pics/myplot.png')
 
 # ## Exercise
 
-# Use Numpy to make the histogram of Hm0 and make a histogram. Try changing the number of bins and try plotting the CDF on top of it.
-
-# In[ ]:
-
-
-
-
+# 1. Make a figure of two subplots. 
+# 2. On the first subplot you can plot Hm0.
+# 3. Plot the histogram of Hm0. Try changing the number of bins and try plotting the CDF on top of it.
