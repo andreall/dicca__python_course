@@ -18,7 +18,11 @@
 
 # <center> <img src="img/pandas_df.png" width="700"/> </center>
 
+<<<<<<< HEAD
 # In[36]:
+=======
+# In[71]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 import numpy as np
@@ -452,17 +456,41 @@ data.iloc[1:3]
 # - ``dropna()``: Return a filtered version of the data
 # - ``fillna()``: Return a copy of the data with missing values filled or imputed
 
-# In[100]:
+# In[125]:
 
 
 data = pd.Series([1, np.nan, 'hello', None])
 data
 
 
-# In[88]:
+# In[80]:
 
 
 mask = data.notnull()
+
+
+# In[82]:
+
+
+mask
+
+
+# In[88]:
+
+
+data2 = pd.Series([2, 3, 98, 187], index=[0, 1, 2, 3])
+
+
+# In[86]:
+
+
+data2
+
+
+# In[89]:
+
+
+data2[mask]
 
 
 # In[90]:
@@ -477,23 +505,58 @@ mask.index
 data
 
 
-# In[91]:
+# In[90]:
 
 
 data[mask]
 
 
-# In[101]:
+# In[92]:
 
 
-data2 = data.dropna() # inplace = True
+#pp[~np.isnan(pp)]
 
 
-# In[103]:
+# In[93]:
 
 
-data2
+data
 
+
+# In[100]:
+
+
+data.dropna(inplace=True) # inplace = True !!!
+
+
+# ### NOTE ON .COPY()
+
+# In[114]:
+
+
+data = np.array([1, 2, 3])
+data_c = data.copy()
+
+
+# In[110]:
+
+
+data_c[0] = 4
+
+
+# In[112]:
+
+
+data_c
+
+
+# In[115]:
+
+
+data
+
+
+# ### END NOTE
 
 # In[60]:
 
@@ -515,7 +578,7 @@ data.dropna(inplace=True)
 data
 
 
-# In[110]:
+# In[126]:
 
 
 df = pd.DataFrame([[1,      np.nan, 2],
@@ -527,13 +590,13 @@ df
 # We cannot drop single values from a DataFrame; we can only drop full rows or full columns. Depending on the application, you might want one or the other, so dropna() gives a number of options for a DataFrame.
 # By default, dropna() will drop all rows in which any null value is present:
 
-# In[111]:
+# In[118]:
 
 
-df.dropna()
+df.dropna(axis=1)
 
 
-# In[114]:
+# In[119]:
 
 
 df.dropna(axis='columns', how='all')
@@ -545,14 +608,14 @@ df.dropna(axis='columns', how='all')
 # The default is ``how='any'``, such that any row or column (depending on the ``axis`` keyword) containing a null value will be dropped.
 # You can also specify ``how='all'``, which will only drop rows/columns that are *all* null values:
 
-# In[67]:
+# In[120]:
 
 
 df[3] = np.nan
 df
 
 
-# In[68]:
+# In[121]:
 
 
 df.dropna(axis='columns', how='all')
@@ -560,7 +623,7 @@ df.dropna(axis='columns', how='all')
 
 # For finer-grained control, the ``thresh`` parameter lets you specify a minimum number of non-null values for the row/column to be kept:
 
-# In[115]:
+# In[122]:
 
 
 df.dropna(axis='rows', thresh=3)
@@ -569,25 +632,25 @@ df.dropna(axis='rows', thresh=3)
 # We can fill NA entries with a single value, such as zero:
 # 
 
-# In[118]:
+# In[123]:
 
 
 df.fillna(-999)
 
 
-# In[123]:
+# In[133]:
 
 
-data.fillna(method='bfill').fillna(897)
+df.loc['d']=np.NaN
 
 
-# In[121]:
+# In[138]:
 
 
-data
+df.fillna(method='ffill', limit=2).fillna(897)
 
 
-# In[4]:
+# In[139]:
 
 
 df.fillna(method='ffill', axis=1)
@@ -598,6 +661,7 @@ df.fillna(method='ffill', axis=1)
 
 # <center> <img src="img/pandas_df_multindex.png" width="500"/> </center>
 
+<<<<<<< HEAD
 # In[3]:
 
 
@@ -615,6 +679,29 @@ sns.pairplot(tips, hue='day');
 
 
 # In[4]:
+=======
+# In[140]:
+
+
+import seaborn as sns
+
+
+# In[141]:
+
+
+tips = sns.load_dataset("tips")
+tips.head()
+
+
+# In[143]:
+
+
+sns.set()
+sns.pairplot(tips,hue='time');
+
+
+# In[147]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # Get mean of smoker/non-smoker groups
@@ -628,13 +715,21 @@ df
 df
 
 
+<<<<<<< HEAD
 # In[8]:
+=======
+# In[148]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 df.reset_index()
 
 
+<<<<<<< HEAD
 # In[9]:
+=======
+# In[153]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # Group by two columns
@@ -642,27 +737,43 @@ df = tips.groupby(['smoker','time']).mean()
 df
 
 
+<<<<<<< HEAD
 # In[10]:
+=======
+# In[151]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # Check out index
 df.index
 
 
+<<<<<<< HEAD
 # In[11]:
+=======
+# In[152]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 tips.groupby(['smoker','time']).size()
 
 
+<<<<<<< HEAD
 # In[13]:
+=======
+# In[158]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # Swap levels of multi-index
 df.swaplevel()
 
 
+<<<<<<< HEAD
 # In[24]:
+=======
+# In[156]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # Unstack your multi-index
@@ -702,6 +813,7 @@ df.unstack(level=0)
 
 # ## Merging, concat
 
+<<<<<<< HEAD
 # In[37]:
 
 
@@ -743,10 +855,48 @@ result = pd.concat(frames)
 
 
 # In[38]:
+=======
+# In[172]:
 
+
+df1 = pd.DataFrame(
+       {
+           "A": ["A0", "A1", "A2", "A3"],
+           "B": ["B0", "B1", "B2", "B3"],
+           "C": ["C0", "C1", "C2", "C3"],
+           "D": ["D0", "D1", "D2", "D3"],
+       },
+       index=[0, 1, 2, 3],
+   )
+   
+df2 = pd.DataFrame(
+        {
+            "A": ["A4", "A5", "A6", "A7"],
+            "B": ["B4", "B5", "B6", "B7"],
+            "C": ["C4", "C5", "C6", "C7"],
+            "D": ["D4", "D5", "D6", "D7"],
+        },
+        index=[0, 1, 2, 3],
+    )
+    
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
+
+df3 = pd.DataFrame(
+       {
+           "A": ["A8", "A9", "A10", "A11"],
+           "B": ["B8", "B9", "B10", "B11"],
+           "C": ["C8", "C9", "C10", "C11"],
+           "D": ["D8", "D9", "D10", "D11"],
+       },
+       index=[8, 9, 10, 11],
+   )
+   
+frames = [df2,df1,  df3]
+result = pd.concat([df2,df1,  df3])
 
 result
 
+<<<<<<< HEAD
 
 # In[40]:
 
@@ -755,6 +905,39 @@ pd.concat(frames, keys=["x", "y", "z"])
 
 
 # In[42]:
+=======
+# In[160]:
+
+
+df1
+
+
+# In[162]:
+
+
+df2
+
+
+# In[165]:
+
+
+df3
+
+
+# In[169]:
+
+
+result.sort_index()
+
+
+# In[174]:
+
+
+pd.concat(frames, keys=["x", "y", "z"]).xs(0, level=1)
+
+
+# In[188]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 df4 = pd.DataFrame(
@@ -767,10 +950,29 @@ df4 = pd.DataFrame(
   )
   
 
+<<<<<<< HEAD
 result = pd.concat([df1, df4], axis=1)
 
 
 # In[44]:
+=======
+result = pd.concat([df1, df4], axis=1, join='inner')
+
+
+# In[182]:
+
+
+df1
+
+
+# In[180]:
+
+
+df4
+
+
+# In[189]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 result
@@ -780,38 +982,121 @@ result
 # 
 # https://towardsdatascience.com/how-to-use-multiindex-in-pandas-to-level-up-your-analysis-aeac7f451fce
 
+<<<<<<< HEAD
 # In[46]:
+=======
+# In[190]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # load data
 df = pd.read_csv('data/WordsByCharacter.csv')
+<<<<<<< HEAD
 
 
 # In[48]:
+=======
+# pd.read_csv, PD.READ_TABLE, pd.read_xls()
+
+
+# In[191]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 df
 
 
+<<<<<<< HEAD
 # In[54]:
+=======
+# In[192]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 multi = df.set_index(['Film', 'Chapter', 'Race', 'Character']).sort_index()
 
 
+<<<<<<< HEAD
 # In[55]:
+=======
+# In[193]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 multi
 
 
+<<<<<<< HEAD
 # Which characters speak in the first chapter of “The Fellowship of the Ring”?
+=======
+# Which characters speak in the first chapter of “The Fellowship of the Ring”? Find the total number of words per characters' race in the first chapter
+
+# In[222]:
+
+
+# Filter by the film “The Fellowship of the Ring”
+# Filter by the 1st chapter
+a1 = multi.xs('The Fellowship Of The Ring', level='Film').xs('01: Prologue', level='Chapter')
+a1
+
+
+# In[224]:
+
+
+multi.xs(['The Fellowship Of The Ring', '01: Prologue'], level=['Film', 'Chapter'])
+
+
+# In[221]:
+
+
+# Obtain number of words per race
+a1.groupby('Race').sum() # .plot(marker='*')
+
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 # Who are the first three elves to speak in the “The Fellowship of the Ring”?
 # 
 
+<<<<<<< HEAD
 # How much do Gandalf and Saruman talk in each chapter of “The Two Towers”?
 
+=======
+# In[232]:
+
+
+multi.loc['The Fellowship Of The Ring', slice(None), 'Elf', :].head(3)
+
+
+# In[233]:
+
+
+multi.xs(['The Fellowship Of The Ring', 'Elf'], level=['Film', 'Race']).head(3)
+
+
+# How much do Gandalf and Saruman talk in each chapter of “The Two Towers”?
+
+# In[249]:
+
+
+a = multi.xs('The Two Towers', level='Film').xs('Gandalf', level='Character')#.sum()
+b = multi.xs('The Two Towers', level='Film').xs('Saruman', level='Character')#.sum()
+c = pd.concat([a, b])
+b
+
+
+# In[251]:
+
+
+multi.xs('The Two Towers', level='Film').xs('Ainur', level='Race')
+
+
+# In[257]:
+
+
+multi.xs('The Two Towers', level='Film').groupby(['Character', 'Chapter']).sum().loc[['Gandalf', 'Saruman']]
+
+
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 # Which hobbits speak the most in each film and across all three films?
 
 # ## Extra pandas + seaborn

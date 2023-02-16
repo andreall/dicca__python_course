@@ -26,9 +26,21 @@ date = parser.parse("4th of July, 2015")
 date
 
 
+<<<<<<< HEAD
 # Once you have a ``datetime`` object, you can do things like printing the day of the week:
 
 # In[4]:
+=======
+# In[4]:
+
+
+date
+
+
+# Once you have a ``datetime`` object, you can do things like printing the day of the week:
+
+# In[5]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 date.strftime('%A')
@@ -48,7 +60,11 @@ date.strftime('%A')
 # The ``datetime64`` dtype encodes dates as 64-bit integers, and thus allows arrays of dates to be represented very compactly.
 # The ``datetime64`` requires a very specific input format:
 
+<<<<<<< HEAD
 # In[14]:
+=======
+# In[6]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 import numpy as np
@@ -58,22 +74,37 @@ date
 
 # Once we have this date formatted, however, we can quickly do vectorized operations on it:
 
+<<<<<<< HEAD
 # In[15]:
+=======
+# In[7]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 date + np.arange(12)
 
 
+<<<<<<< HEAD
 # In[7]:
 
 
 np.datetime64('2015-07-04 12:00')
+=======
+# In[11]:
+
+
+aa = np.datetime64('2015-07-04 12:00:00')
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # Notice that the time zone is automatically set to the local time on the computer executing the code.
 # You can force any desired fundamental unit using one of many format codes; for example, here we'll force a nanosecond-based time:
 
+<<<<<<< HEAD
 # In[7]:
+=======
+# In[19]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 np.datetime64('2015-07-04 12:59:59.50', 'ns')
@@ -104,7 +135,11 @@ np.datetime64('2015-07-04 12:59:59.50', 'ns')
 # Pandas builds upon all the tools just discussed to provide a ``Timestamp`` object, which combines the ease-of-use of ``datetime`` and ``dateutil`` with the efficient storage and vectorized interface of ``numpy.datetime64``.
 # From a group of these ``Timestamp`` objects, Pandas can construct a ``DatetimeIndex`` that can be used to index data in a ``Series`` or ``DataFrame``; we'll see many examples of this below.
 
+<<<<<<< HEAD
 # In[3]:
+=======
+# In[20]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 import pandas as pd
@@ -119,13 +154,21 @@ date
 date.strftime('%A')
 
 
+<<<<<<< HEAD
 # In[30]:
+=======
+# In[22]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 pd.to_timedelta(np.arange(12), 'D')
 
 
+<<<<<<< HEAD
 # In[32]:
+=======
+# In[23]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 date + pd.to_timedelta(np.arange(12), 'D')
@@ -142,7 +185,11 @@ pd.to_timedelta(np.arange(12), 'D')
 # Where the Pandas time series tools really become useful is when you begin to *index data by timestamps*.
 # For example, we can construct a ``Series`` object that has time indexed data:
 
+<<<<<<< HEAD
 # In[61]:
+=======
+# In[24]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 index = pd.DatetimeIndex(['2014-07-04', '2014-08-04',
@@ -159,24 +206,48 @@ data.plot(marker='.')
 
 # Now that we have this data in a ``Series``, we can make use of any of the ``Series`` indexing patterns we discussed in previous sections, passing values that can be coerced into dates:
 
+<<<<<<< HEAD
 # In[46]:
 
 
 data['2014-07-04':'2015-07-04']
+=======
+# In[25]:
+
+
+data['2014-07-04':'2015-01-01']
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # There are additional special date-only indexing operations, such as passing a year to obtain a slice of all data from that year:
 
+<<<<<<< HEAD
 # In[48]:
+=======
+# In[26]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 data['2015']
 
 
+<<<<<<< HEAD
 # In[58]:
 
 
 data.index.second
+=======
+# In[32]:
+
+
+data.index.hour
+
+
+# In[37]:
+
+
+data[data.index.month == 12]
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # In[62]:
@@ -200,7 +271,11 @@ data[data.index.day==7]
 # While these class objects can be invoked directly, it is more common to use the ``pd.to_datetime()`` function, which can parse a wide variety of formats.
 # Passing a single date to ``pd.to_datetime()`` yields a ``Timestamp``; passing a series of dates by default yields a ``DatetimeIndex``:
 
+<<<<<<< HEAD
 # In[63]:
+=======
+# In[38]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 dates = pd.to_datetime([datetime(2015, 7, 3), '4th of July, 2015',
@@ -210,10 +285,17 @@ dates
 
 # A ``TimedeltaIndex`` is created, for example, when a date is subtracted from another:
 
+<<<<<<< HEAD
 # In[64]:
 
 
 dates - dates[0]
+=======
+# In[40]:
+
+
+dates[1:] - dates[0:-1]
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # ### Regular sequences: ``pd.date_range()``
@@ -229,7 +311,11 @@ dates - dates[0]
 np.arange(0, 10)
 
 
+<<<<<<< HEAD
 # In[68]:
+=======
+# In[41]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 pd.date_range('2015-07-03', '2020-07-03')
@@ -246,7 +332,11 @@ pd.date_range('2015-07-03', periods=8)
 # The spacing can be modified by altering the ``freq`` argument, which defaults to ``D``.
 # For example, here we will construct a range of hourly timestamps:
 
+<<<<<<< HEAD
 # In[31]:
+=======
+# In[42]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 pd.date_range('2015-07-03', periods=8, freq='MS')
@@ -255,7 +345,11 @@ pd.date_range('2015-07-03', periods=8, freq='MS')
 # To create regular sequences of ``Period`` or ``Timedelta`` values, the very similar ``pd.period_range()`` and ``pd.timedelta_range()`` functions are useful.
 # Here are some monthly periods:
 
+<<<<<<< HEAD
 # In[32]:
+=======
+# In[43]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 pd.period_range('2015-07', periods=8, freq='M')
@@ -263,10 +357,17 @@ pd.period_range('2015-07', periods=8, freq='M')
 
 # And a sequence of durations increasing by an hour:
 
+<<<<<<< HEAD
 # In[33]:
 
 
 pd.timedelta_range(0, periods=10, freq='H')
+=======
+# In[50]:
+
+
+pd.timedelta_range('1 days', periods=10, freq='H')
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # ## Frequencies and Offsets
@@ -310,10 +411,17 @@ pd.timedelta_range(0, periods=10, freq='H')
 # On top of this, codes can be combined with numbers to specify other frequencies.
 # For example, for a frequency of 2 hours 30 minutes, we can combine the hour (``H``) and minute (``T``) codes as follows:
 
+<<<<<<< HEAD
 # In[69]:
 
 
 pd.timedelta_range(0, periods=9, freq="2H30T")
+=======
+# In[52]:
+
+
+pd.to_datetime('2022-07-01') + pd.timedelta_range(0, periods=9, freq="2H30T")
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 # All of these short codes refer to specific instances of Pandas time series offsets, which can be found in the ``pd.tseries.offsets`` module.
@@ -328,17 +436,38 @@ pd.date_range('2015-07-01', periods=5, freq=BDay())
 
 # ## Reading data
 
+<<<<<<< HEAD
 # In[6]:
+=======
+# In[54]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 df = pd.read_table('data/data_waves.dat')
 df
 
 
+<<<<<<< HEAD
 # names=['YY', 'mm', 'DD', 'time', 'hs', 'tm', 'tp', 'dirm', 'dp', 'spr', 'h', 'lm', 'lp', 
 #                           'uw', 'vw']
 
 # In[47]:
+=======
+# In[62]:
+
+
+df = pd.read_table('data/data_waves.dat', header=None, delim_whitespace=True, 
+                   names=['YY', 'mm', 'DD', 'time', 'hs', 'tm', 'tp', 'dirm', 'dp', 'spr', 'h', 'lm', 'lp', 
+                          'uw', 'vw'],
+                  parse_dates=[[0, 1, 2, 3]], index_col=0)
+df
+
+
+# names=['YY', 'mm', 'DD', 'time', 'hs', 'tm', 'tp', 'dirm', 'dp', 'spr', 'h', 'lm', 'lp', 
+#                           'uw', 'vw']
+
+# In[63]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 df = pd.read_table('data/data_waves.dat', header=None, delim_whitespace=True, parse_dates=[[0, 1, 2, 3]], 
@@ -351,12 +480,17 @@ df.dropna(inplace=True) # df = df.dropna()
 df
 
 
+<<<<<<< HEAD
 # In[48]:
+=======
+# In[64]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 df.describe()
 
 
+<<<<<<< HEAD
 # In[9]:
 
 
@@ -370,6 +504,21 @@ df.mean()
 
 
 # In[58]:
+=======
+# In[69]:
+
+
+df.hs[:10000].plot()
+
+
+# In[70]:
+
+
+df.max()
+
+
+# In[71]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 df.sort_values('hs', ascending=False)
@@ -383,6 +532,7 @@ df.sort_values('hs', ascending=False)
 df['hs']
 
 
+<<<<<<< HEAD
 # In[12]:
 
 
@@ -396,12 +546,31 @@ df.rolling('12H').mean().hs.plot()
 
 
 # In[20]:
+=======
+# In[74]:
+
+
+df.hs[:100].plot()
+
+
+# In[73]:
+
+
+df.rolling('12H').mean().hs[:100].plot()
+
+
+# In[76]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 dfi = df.iloc[:500]
 
 
+<<<<<<< HEAD
 # In[22]:
+=======
+# In[77]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 import matplotlib.pyplot as plt
@@ -433,13 +602,21 @@ df.hs.asfreq('Y').plot()
 # Just as with the ``pd.fillna()`` function discussed previously, ``asfreq()`` accepts a ``method`` argument to specify how values are imputed.
 # Here, we will resample the business day data at a daily frequency (i.e., including weekends):
 
+<<<<<<< HEAD
 # In[49]:
+=======
+# In[82]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 df.resample('A').max()
 
 
+<<<<<<< HEAD
 # In[45]:
+=======
+# In[81]:
+>>>>>>> 428b51c5db1520654ccf25f138b488a0c1fef28f
 
 
 annual_max = df.groupby(df.index.year).max()
