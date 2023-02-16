@@ -137,3 +137,7 @@ dmypy.json
 /exercises
 /.idea
 /data/CESM2_sst_data.nc
+/data/Storico meteo
+/data/WW3_mediterr_19980601.nc
+/data/WW3_mediterr_19980701.nc
+/data/WW3_mediterr_20091201.grb2

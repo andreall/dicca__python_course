@@ -4,6 +4,9 @@
 # # Pandas
 
 # At the very basic level, Pandas objects can be thought of as enhanced versions of NumPy structured arrays in which the rows and columns are identified with labels rather than simple integer indices.
+# 
+# https://www.datacamp.com/tutorial/pandas-multi-index
+# 
 
 # ### Numpy:
 # Data WITHOUT indexes ---> Arrays (1D or many dimensions)
@@ -15,7 +18,7 @@
 
 # <center> <img src="img/pandas_df.png" width="700"/> </center>
 
-# In[1]:
+# In[71]:
 
 
 import numpy as np
@@ -31,17 +34,24 @@ import pandas as pd
 # A Pandas ``Series`` is a one-dimensional array of indexed data.
 # It can be created from a list or array as follows:
 
-# In[5]:
+# In[8]:
 
 
 data = pd.Series([0.25, 0.5, 0.75, 1.0])
 data
 
 
+# In[10]:
+
+
+datanp = np.array([0.25, 0.5, 0.75, 1.0])
+datanp
+
+
 # As we see in the output, the ``Series`` wraps both a sequence of values and a sequence of indices, which we can access with the ``values`` and ``index`` attributes.
 # The ``values`` are simply a familiar NumPy array:
 
-# In[7]:
+# In[11]:
 
 
 data.values
@@ -49,7 +59,7 @@ data.values
 
 # The ``index`` is an array-like object of type ``pd.Index``, which we'll discuss in more detail momentarily.
 
-# In[8]:
+# In[12]:
 
 
 data.index
@@ -57,19 +67,19 @@ data.index
 
 # Like with a NumPy array, data can be accessed by the associated index via the familiar Python square-bracket notation:
 
-# In[9]:
+# In[13]:
 
 
 data[1]
 
 
-# In[10]:
+# In[14]:
 
 
 data[1:3]
 
 
-# In[15]:
+# In[18]:
 
 
 data = pd.Series([0.25, 0.5, 0.75, 1.0],
@@ -77,18 +87,27 @@ data = pd.Series([0.25, 0.5, 0.75, 1.0],
 data
 
 
-# # loc, iloc
+# In[21]:
 
-# In[20]:
+
+data.iloc[1] # CHECH data[1]
+
+
+# # loc, iloc
+# 
+# ### loc --> access your series/df by index (rows, columns)
+# ### iloc --> access your series/df by position
+
+# In[27]:
 
 
 data.iloc[0]
 
 
-# In[22]:
+# In[28]:
 
 
-data['a']
+data.loc['a']
 
 
 # In[23]:
@@ -105,7 +124,7 @@ data['b']
 
 # We can even use non-contiguous or non-sequential indices:
 
-# In[34]:
+# In[29]:
 
 
 data = pd.Series([0.25, 0.5, 0.75, 1.0],
@@ -113,7 +132,7 @@ data = pd.Series([0.25, 0.5, 0.75, 1.0],
 data
 
 
-# In[35]:
+# In[30]:
 
 
 data.index
@@ -125,7 +144,7 @@ data.index
 data[5]
 
 
-# In[27]:
+# In[32]:
 
 
 population_dict = {'California': 38332521,
@@ -140,13 +159,13 @@ population
 # By default, a ``Series`` will be created where the index is drawn from the sorted keys.
 # From here, typical dictionary-style item access can be performed:
 
-# In[29]:
+# In[33]:
 
 
 population['California']
 
 
-# In[30]:
+# In[34]:
 
 
 population.values
@@ -180,7 +199,7 @@ pd.Series([2, 4, 6])
 
 # ``data`` can be a scalar, which is repeated to fill the specified index:
 
-# In[15]:
+# In[35]:
 
 
 pd.Series(5, index=[100, 200, 300])
@@ -188,7 +207,7 @@ pd.Series(5, index=[100, 200, 300])
 
 # ``data`` can be a dictionary, in which ``index`` defaults to the sorted dictionary keys:
 
-# In[16]:
+# In[36]:
 
 
 pd.Series({2:'a', 1:'b', 3:'c'})
@@ -209,7 +228,7 @@ pd.Series({2:'a', 1:'b', 3:'c'})
 # 
 # To demonstrate this, let's first construct a new ``Series`` listing the area of each of the five states discussed in the previous section:
 
-# In[44]:
+# In[37]:
 
 
 area_dict = {'California': 423967, 'Illinois': 149995, 'Texas': 695662, 'New York': 141297,
@@ -226,7 +245,7 @@ population
 
 # Now that we have this along with the ``population`` Series from before, we can use a dictionary to construct a single two-dimensional object containing this information:
 
-# In[45]:
+# In[39]:
 
 
 states = pd.DataFrame({'population': population,
@@ -236,7 +255,7 @@ states
 
 # Like the ``Series`` object, the ``DataFrame`` has an ``index`` attribute that gives access to the index labels:
 
-# In[46]:
+# In[40]:
 
 
 states.index
@@ -244,7 +263,7 @@ states.index
 
 # Additionally, the ``DataFrame`` has a ``columns`` attribute, which is an ``Index`` object holding the column labels:
 
-# In[47]:
+# In[41]:
 
 
 states.columns
@@ -258,7 +277,7 @@ states.columns
 # 
 # A ``DataFrame`` is a collection of ``Series`` objects, and a single-column ``DataFrame`` can be constructed from a single ``Series``:
 
-# In[21]:
+# In[42]:
 
 
 pd.DataFrame(population, columns=['population'])
@@ -269,36 +288,27 @@ pd.DataFrame(population, columns=['population'])
 # Any list of dictionaries can be made into a ``DataFrame``.
 # We'll use a simple list comprehension to create some data:
 
-# In[51]:
+# In[44]:
 
 
-data = [{'a': i, 'b': 2 * i}
-        for i in range(3)]
-data = pd.DataFrame(data, index=['a', 'b', 'c'])
-data
-
-
-# In[50]:
-
-
-data = [{'a': i, 'b': 2 * i}
-        for i in range(3)]
+data = [{'a': i, 'b': 2 * i} for i in range(3)]
+data = pd.DataFrame(data, index=['aa', 'bb', 'cc'])
 data
 
 
 # Even if some keys in the dictionary are missing, Pandas will fill them in with ``NaN`` (i.e., "not a number") values:
 
-# In[60]:
+# In[46]:
 
 
-df = pd.DataFrame([{'a': 1, 'b': 2}, {'b': 3, 'c': 4}])
+df = pd.DataFrame([{'a': 1, 'b': 2}, {'b': 3, 'c': 4}, {'d':1}])
 df
 
 
-# In[61]:
+# In[52]:
 
 
-df.loc[0, 'c'] = 6
+df.loc[:, 'b']
 
 
 # In[62]:
@@ -323,12 +333,12 @@ pd.DataFrame({'population': population,
 # Given a two-dimensional array of data, we can create a ``DataFrame`` with any specified column and index names.
 # If omitted, an integer index will be used for each:
 
-# In[66]:
+# In[53]:
 
 
 data = pd.DataFrame(np.random.rand(3, 2),
-             columns=['foo', 'bar'],
-                   index=[1, 2, 5])
+                    columns=['foo', 'bar'],
+                    index=[1, 2, 5])
 data
 
 
@@ -345,14 +355,14 @@ np.random.rand(3, 2)
 # Those views have some interesting consequences in the operations available on ``Index`` objects.
 # As a simple example, let's construct an ``Index`` from a list of integers:
 
-# In[30]:
+# In[56]:
 
 
 ind = pd.Index([2, 3, 5, 7, 11])
 ind
 
 
-# In[27]:
+# In[57]:
 
 
 print(ind.size, ind.shape, ind.ndim, ind.dtype)
@@ -371,45 +381,45 @@ print(ind.size, ind.shape, ind.ndim, ind.dtype)
 
 # First, the ``loc`` attribute allows indexing and slicing that always references the explicit index:
 
-# In[67]:
+# In[58]:
 
 
 data
 
 
-# In[76]:
+# In[59]:
 
 
 data.loc[1]
 
 
-# In[78]:
+# In[60]:
 
 
 data.loc[:, 'foo']
 
 
-# In[50]:
+# In[62]:
 
 
 data.iloc[0].loc['foo']
 
 
-# In[79]:
+# In[63]:
 
 
-data['foo']
+data['bar']
 
 
-# In[81]:
+# In[64]:
 
 
 data.bar
 
 
-# col = 'a' (position 2)
+# ## col = 'a' (position 2)
 # 
-# df.a, df['a'], df.loc[:,'a'], df.iloc[:, 2]
+# ## df.a, df['a'], df.loc[:,'a'], df.iloc[:, 2]
 
 # In[53]:
 
@@ -442,17 +452,41 @@ data.iloc[1:3]
 # - ``dropna()``: Return a filtered version of the data
 # - ``fillna()``: Return a copy of the data with missing values filled or imputed
 
-# In[100]:
+# In[125]:
 
 
 data = pd.Series([1, np.nan, 'hello', None])
 data
 
 
-# In[88]:
+# In[80]:
 
 
 mask = data.notnull()
+
+
+# In[82]:
+
+
+mask
+
+
+# In[88]:
+
+
+data2 = pd.Series([2, 3, 98, 187], index=[0, 1, 2, 3])
+
+
+# In[86]:
+
+
+data2
+
+
+# In[89]:
+
+
+data2[mask]
 
 
 # In[90]:
@@ -467,23 +501,58 @@ mask.index
 data
 
 
-# In[91]:
+# In[90]:
 
 
 data[mask]
 
 
-# In[101]:
+# In[92]:
 
 
-data2 = data.dropna() # inplace = True
+#pp[~np.isnan(pp)]
 
 
-# In[103]:
+# In[93]:
 
 
-data2
+data
 
+
+# In[100]:
+
+
+data.dropna(inplace=True) # inplace = True !!!
+
+
+# ### NOTE ON .COPY()
+
+# In[114]:
+
+
+data = np.array([1, 2, 3])
+data_c = data.copy()
+
+
+# In[110]:
+
+
+data_c[0] = 4
+
+
+# In[112]:
+
+
+data_c
+
+
+# In[115]:
+
+
+data
+
+
+# ### END NOTE
 
 # In[60]:
 
@@ -505,7 +574,7 @@ data.dropna(inplace=True)
 data
 
 
-# In[110]:
+# In[126]:
 
 
 df = pd.DataFrame([[1,      np.nan, 2],
@@ -517,13 +586,13 @@ df
 # We cannot drop single values from a DataFrame; we can only drop full rows or full columns. Depending on the application, you might want one or the other, so dropna() gives a number of options for a DataFrame.
 # By default, dropna() will drop all rows in which any null value is present:
 
-# In[111]:
+# In[118]:
 
 
-df.dropna()
+df.dropna(axis=1)
 
 
-# In[114]:
+# In[119]:
 
 
 df.dropna(axis='columns', how='all')
@@ -535,14 +604,14 @@ df.dropna(axis='columns', how='all')
 # The default is ``how='any'``, such that any row or column (depending on the ``axis`` keyword) containing a null value will be dropped.
 # You can also specify ``how='all'``, which will only drop rows/columns that are *all* null values:
 
-# In[67]:
+# In[120]:
 
 
 df[3] = np.nan
 df
 
 
-# In[68]:
+# In[121]:
 
 
 df.dropna(axis='columns', how='all')
@@ -550,7 +619,7 @@ df.dropna(axis='columns', how='all')
 
 # For finer-grained control, the ``thresh`` parameter lets you specify a minimum number of non-null values for the row/column to be kept:
 
-# In[115]:
+# In[122]:
 
 
 df.dropna(axis='rows', thresh=3)
@@ -559,36 +628,28 @@ df.dropna(axis='rows', thresh=3)
 # We can fill NA entries with a single value, such as zero:
 # 
 
-# In[118]:
+# In[123]:
 
 
 df.fillna(-999)
 
 
-# In[123]:
+# In[133]:
 
 
-data.fillna(method='bfill').fillna(897)
+df.loc['d']=np.NaN
 
 
-# In[121]:
+# In[138]:
 
 
-data
+df.fillna(method='ffill', limit=2).fillna(897)
 
 
-# In[4]:
+# In[139]:
 
 
 df.fillna(method='ffill', axis=1)
-
-
-# ## Merging, concat
-
-# In[ ]:
-
-
-
 
 
 # ## Multi-Index
@@ -596,12 +657,355 @@ df.fillna(method='ffill', axis=1)
 
 # <center> <img src="img/pandas_df_multindex.png" width="500"/> </center>
 
-# In[ ]:
+# In[140]:
 
 
-## Data Selection in DataFrame
+import seaborn as sns
 
-Recall that a ``DataFrame`` acts in many ways like a two-dimensional or structured array, and in other ways like a dictionary of ``Series`` structures sharing the same index.
 
-loc, iloc, 
+# In[141]:
 
+
+tips = sns.load_dataset("tips")
+tips.head()
+
+
+# In[143]:
+
+
+sns.set()
+sns.pairplot(tips,hue='time');
+
+
+# In[147]:
+
+
+# Get mean of smoker/non-smoker groups
+df = tips.groupby('smoker').mean()
+df
+
+
+# In[5]:
+
+
+df
+
+
+# In[148]:
+
+
+df.reset_index()
+
+
+# In[153]:
+
+
+# Group by two columns
+df = tips.groupby(['smoker','time']).mean()
+df
+
+
+# In[151]:
+
+
+# Check out index
+df.index
+
+
+# In[152]:
+
+
+tips.groupby(['smoker','time']).size()
+
+
+# In[158]:
+
+
+# Swap levels of multi-index
+df.swaplevel()
+
+
+# In[156]:
+
+
+# Unstack your multi-index
+df.xs('Lunch', level='time')
+
+
+# In[25]:
+
+
+df.xs('Yes', level='smoker')
+
+
+# In[32]:
+
+
+df.loc['Yes', :]
+
+
+# In[33]:
+
+
+df.loc['Yes', :].sum()
+
+
+# In[31]:
+
+
+df.loc[('Yes', 'Lunch'), :]
+
+
+# In[15]:
+
+
+# Unsstack the outer index
+df.unstack(level=0)
+
+
+# ## Merging, concat
+
+# In[172]:
+
+
+df1 = pd.DataFrame(
+       {
+           "A": ["A0", "A1", "A2", "A3"],
+           "B": ["B0", "B1", "B2", "B3"],
+           "C": ["C0", "C1", "C2", "C3"],
+           "D": ["D0", "D1", "D2", "D3"],
+       },
+       index=[0, 1, 2, 3],
+   )
+   
+df2 = pd.DataFrame(
+        {
+            "A": ["A4", "A5", "A6", "A7"],
+            "B": ["B4", "B5", "B6", "B7"],
+            "C": ["C4", "C5", "C6", "C7"],
+            "D": ["D4", "D5", "D6", "D7"],
+        },
+        index=[0, 1, 2, 3],
+    )
+    
+
+df3 = pd.DataFrame(
+       {
+           "A": ["A8", "A9", "A10", "A11"],
+           "B": ["B8", "B9", "B10", "B11"],
+           "C": ["C8", "C9", "C10", "C11"],
+           "D": ["D8", "D9", "D10", "D11"],
+       },
+       index=[8, 9, 10, 11],
+   )
+   
+frames = [df2,df1,  df3]
+result = pd.concat([df2,df1,  df3])
+
+
+# In[160]:
+
+
+df1
+
+
+# In[162]:
+
+
+df2
+
+
+# In[165]:
+
+
+df3
+
+
+# In[169]:
+
+
+result.sort_index()
+
+
+# In[174]:
+
+
+pd.concat(frames, keys=["x", "y", "z"]).xs(0, level=1)
+
+
+# In[188]:
+
+
+df4 = pd.DataFrame(
+      {
+          "B": ["B2", "B3", "B6", "B7"],
+          "D": ["D2", "D3", "D6", "D7"],
+          "F": ["F2", "F3", "F6", "F7"],
+      },
+      index=[2, 3, 6, 7],
+  )
+  
+
+result = pd.concat([df1, df4], axis=1, join='inner')
+
+
+# In[182]:
+
+
+df1
+
+
+# In[180]:
+
+
+df4
+
+
+# In[189]:
+
+
+result
+
+
+# ## Exercise
+# 
+# https://towardsdatascience.com/how-to-use-multiindex-in-pandas-to-level-up-your-analysis-aeac7f451fce
+
+# In[190]:
+
+
+# load data
+df = pd.read_csv('data/WordsByCharacter.csv')
+# pd.read_csv, PD.READ_TABLE, pd.read_xls()
+
+
+# In[191]:
+
+
+df
+
+
+# In[192]:
+
+
+multi = df.set_index(['Film', 'Chapter', 'Race', 'Character']).sort_index()
+
+
+# In[193]:
+
+
+multi
+
+
+# Which characters speak in the first chapter of “The Fellowship of the Ring”? Find the total number of words per characters' race in the first chapter
+
+# In[222]:
+
+
+# Filter by the film “The Fellowship of the Ring”
+# Filter by the 1st chapter
+a1 = multi.xs('The Fellowship Of The Ring', level='Film').xs('01: Prologue', level='Chapter')
+a1
+
+
+# In[224]:
+
+
+multi.xs(['The Fellowship Of The Ring', '01: Prologue'], level=['Film', 'Chapter'])
+
+
+# In[221]:
+
+
+# Obtain number of words per race
+a1.groupby('Race').sum() # .plot(marker='*')
+
+
+# Who are the first three elves to speak in the “The Fellowship of the Ring”?
+# 
+
+# In[232]:
+
+
+multi.loc['The Fellowship Of The Ring', slice(None), 'Elf', :].head(3)
+
+
+# In[233]:
+
+
+multi.xs(['The Fellowship Of The Ring', 'Elf'], level=['Film', 'Race']).head(3)
+
+
+# How much do Gandalf and Saruman talk in each chapter of “The Two Towers”?
+
+# In[249]:
+
+
+a = multi.xs('The Two Towers', level='Film').xs('Gandalf', level='Character')#.sum()
+b = multi.xs('The Two Towers', level='Film').xs('Saruman', level='Character')#.sum()
+c = pd.concat([a, b])
+b
+
+
+# In[251]:
+
+
+multi.xs('The Two Towers', level='Film').xs('Ainur', level='Race')
+
+
+# In[257]:
+
+
+multi.xs('The Two Towers', level='Film').groupby(['Character', 'Chapter']).sum().loc[['Gandalf', 'Saruman']]
+
+
+# Which hobbits speak the most in each film and across all three films?
+
+# ## Extra pandas + seaborn
+
+# In[61]:
+
+
+# Load the penguins dataset
+penguins = sns.load_dataset("penguins")
+
+
+# In[63]:
+
+
+penguins
+
+
+# In[65]:
+
+
+g = sns.jointplot(
+    data=penguins,
+    x="bill_length_mm", y="bill_depth_mm", hue="species",
+    kind="kde",
+)
+
+
+# In[68]:
+
+
+# Draw a categorical scatterplot to show each observation
+ax = sns.swarmplot(data=penguins, x="body_mass_g", y="sex", hue="species")
+ax.set(ylabel="")
+
+
+# In[70]:
+
+
+mpg = sns.load_dataset("mpg")
+
+colors = (250, 70, 50), (350, 70, 50)
+cmap = sns.blend_palette(colors, input="husl", as_cmap=True)
+sns.displot(
+    mpg,
+    x="displacement", col="origin", hue="model_year",
+    kind="ecdf", aspect=.75, linewidth=2, palette=cmap,
+)
+
+
+# For the LOTR exercise, plot the number of words per character, per film, per chapter --> how would you present the data?
