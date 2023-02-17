@@ -21,7 +21,7 @@
 # 
 # - **Feature selection** − It is used to identify useful attributes to create supervised models.
 
-# In[28]:
+# In[104]:
 
 
 # import sklearn as skl
@@ -83,7 +83,7 @@
 # <center> <img src="img/clust2.png" width="800"/> </center>
 # 
 
-# In[79]:
+# In[3]:
 
 
 import numpy as np
@@ -120,12 +120,21 @@ colors = np.asarray(plt.cm.tab10.colors)
 # 
 # - **max_iter** int, default=300. Maximum number of iterations, per seed point before the clustering operation terminates (for that seed point), if has not converged yet.
 
-# In[64]:
+# In[4]:
 
 
 # obtain a matrix data from csv
 data = np.genfromtxt('data/205.csv', delimiter=',')                                                     # build 2D projected data (on xy plane)
 X = data[:, :3]### Mean Shift
+
+
+# In[115]:
+
+
+plt.figure(figsize=(6, 5))
+ax = plt.axes(projection ="3d")
+p = ax.scatter3D(X[:,0],X[:,1],X[:,2], alpha=0.5, s=10, c=data[:, 3], cmap='Reds') 
+plt.colorbar(p)
 
 
 # ### K-Means
@@ -147,19 +156,32 @@ X = data[:, :3]### Mean Shift
 # 
 # class sklearn.cluster.KMeans(n_clusters=8, *, init='k-means++', n_init='warn', max_iter=300, tol=0.0001, verbose=0, random_state=None, copy_x=True, algorithm='lloyd')
 
-# In[78]:
+# In[5]:
 
 
 # KMeans clustering
 from sklearn.cluster import KMeans
-kmeans = KMeans(n_clusters=4)  
+kmeans = KMeans(n_clusters=2)  
+
+
+# In[118]:
+
+
+kmeans
+
+
+# In[138]:
+
 
 # fit model
 predicted_clusters_km = kmeans.fit_predict(X) 
 cluster_centers = kmeans.cluster_centers_
 
-plt.figure(figsize=(10, 8))
-colors = np.asarray(plt.cm.tab10.colors)
+
+# In[139]:
+
+
+plt.figure(figsize=(8, 6))
 ax = plt.axes(projection ="3d")
 ax.scatter3D(X[:,0],X[:,1],X[:,2],alpha=0.5, s=20, c=colors[predicted_clusters_km])   
 ax.scatter(cluster_centers[:, 0], cluster_centers[:, 1], cluster_centers[:, 2], c='k', s=50, zorder=10)
@@ -192,19 +214,20 @@ plt.show()
 # 
 # - **max_iter** int, default=300. Maximum number of iterations, per seed point before the clustering operation terminates (for that seed point), if has not converged yet.
 
-# In[75]:
+# In[6]:
 
 
 # meanshift clustering
 from sklearn.cluster import MeanShift
-meanshift = MeanShift(cluster_all=False, bin_seeding = True, min_bin_freq = 10)  
+meanshift = MeanShift(cluster_all=False, bin_seeding=True, min_bin_freq=20)  
 
 # fit model
 predicted_clusters_ms = meanshift.fit_predict(X) 
 cluster_centers = meanshift.cluster_centers_
+
 mask = predicted_clusters_ms != -1
 
-plt.figure(figsize=(10, 8))
+plt.figure(figsize=(8, 4))
 colors = np.asarray(plt.cm.tab10.colors)
 ax = plt.axes(projection ="3d")
 ax.scatter3D(X[:,0],X[:,1],X[:,2],alpha=0.5, s=10, c='gray')   
@@ -252,17 +275,17 @@ plt.show()
 # - **n_jobs** int, default=None
 # The number of parallel jobs to run. None means 1 unless in a joblib.parallel_backend context. -1 means using all processors. See Glossary for more details.
 
-# In[86]:
+# In[7]:
 
 
 # DBSCAN clustring 
 from sklearn.cluster import DBSCAN
-dbscan = DBSCAN(eps=3, min_samples=10, n_jobs=2)     
-predicted_clusters_db = dbscan.fit_predict(X)                                   # fit model and predict clusters
+dbscan = DBSCAN(eps=3, min_samples=20, n_jobs=1)     
+predicted_clusters_db = dbscan.fit_predict(X)  # fit model and predict clusters
 
 mask = predicted_clusters_db != -1
 
-plt.figure(figsize=(10, 8))
+plt.figure(figsize=(8, 6))
 ax = plt.axes(projection ="3d")
 ax.scatter3D(X[:,0],X[:,1],X[:,2],alpha=0.5, s=10, c='gray')   
 ax.scatter3D(X[mask,0],X[mask,1],X[mask,2],alpha=0.5, s=20, c=colors[predicted_clusters_db[mask]])   
@@ -271,17 +294,33 @@ plt.title("DBSCAN clustering")
 plt.show()    
 
 
-# In[100]:
+# In[8]:
 
 
-from sklearn.cluster import DBSCAN
-dbscan = DBSCAN(eps=3, min_samples=10, n_jobs=2)     
-predicted_clusters_db = dbscan.fit_predict(X)                                   # fit model and predict clusters
+XX = np.tile(X, (200, 1))
+
+
+# In[9]:
+
+
+get_ipython().run_cell_magic('time', '', '# fit model\nkmeans = KMeans(n_clusters=3)  \npredicted_clusters_km = kmeans.fit_predict(XX) \ncluster_centers = kmeans.cluster_centers_')
+
+
+# In[10]:
+
+
+get_ipython().run_cell_magic('time', '', 'from sklearn.cluster import DBSCAN\ndbscan = DBSCAN(eps=3, min_samples=10, n_jobs=1)     \npredicted_clusters_db = dbscan.fit_predict(XX)                                   # fit model and predict clusters')
+
+
+# In[11]:
+
+
+get_ipython().run_cell_magic('time', '', 'from sklearn.cluster import DBSCAN\ndbscan = DBSCAN(eps=3, min_samples=10, n_jobs=3)     \npredicted_clusters_db = dbscan.fit_predict(XX)       ')
 
 
 # ### Exercise
 
-# In[103]:
+# In[47]:
 
 
 import seaborn as sns; sns.set(color_codes=True)
@@ -291,11 +330,88 @@ print(species.unique())         # The samples seems to be from these three speci
 #sns.clustermap(iris, method="ward", col_cluster=False, cbar_kws={'label': 'centimeters'}); # Cluster only the rows
 
 
-# Apply k-means clustering with 3 clusters. Create a function plant_clustering that loads the iris data set, clusters the data and returns the accuracy_score.
+# In[48]:
+
+
+species
+
+
+# In[29]:
+
+
+iris
+
+
+# In[30]:
+
+
+#fig, ax = plt.subplots(figsize=(8, 5))
+sns.pairplot(iris)
+
+
+# In[45]:
+
+
+km = KMeans(n_clusters=2)
+predicted_clusters_km = km.fit_predict(iris) 
+
+
+# In[42]:
+
+
+predicted_clusters_km
+
+
+# In[46]:
+
+
+fig, axs = plt.subplots(4, 4, figsize=(8, 8))
+for ii, col in enumerate(iris.columns):
+    for kk, col2 in enumerate(iris.columns):
+        axs[ii, kk].scatter(iris.loc[:, col].values, iris.loc[:, col2].values, c='gray', alpha=0.3)
+        axs[ii, kk].scatter(iris.loc[:, col].values, iris.loc[:, col2].values, c=colors[predicted_clusters_km])
+
+
+# In[53]:
+
+
+from sklearn.cluster import KMeans
+from sklearn.metrics import accuracy_score
+
+## y is the ground truth input 
+## species string as 0, 1, 2
+
+def plant_clustering(df, y_true, n_clusters=3):
+    
+    km = KMeans(n_clusters)
+    predicted = km.fit_predict(df)
+    centers = km.cluster_centers_
+    acc_score = accuracy_score(y_true, predicted)
+    
+    return acc_score   
+
+
+# In[ ]:
+
+
+y_truth = list()
+for yt, _ in enumerate(species.unique):
+    # iterate thorugh species and assign index
+    
+
+
+#  Apply k-means clustering with 3 clusters. Create a function plant_clustering that loads the iris data set, clusters the data and returns the accuracy_score.
 # 
 # 
 # #from sklearn.metrics import accuracy_score
 # 
+
+# In[18]:
+
+
+km = KMeans(n_clusters=3)
+predicted_clusters_km = kmeans.fit_predict(iris) 
+
 
 # ### References 
 # - https://www.tutorialspoint.com/scikit_learn/scikit_learn_clustering_methods.htm

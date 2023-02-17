@@ -38,7 +38,7 @@
 # - Normality: For any fixed value of X, Y is normally distributed.
 # - Linearity: The relationship between X and the mean of Y is linear.
 
-# In[32]:
+# In[71]:
 
 
 #libraries
@@ -56,19 +56,36 @@ from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error, r2_score
 
 
-# In[33]:
+# In[44]:
 
 
 ### Examples from Scikit Learn
 
 
-# In[40]:
+# In[66]:
 
 
-## Linear Regression
 
 # Load the diabetes dataset
 diabetes_X, diabetes_y = datasets.load_diabetes(return_X_y=True)
+
+
+# In[60]:
+
+
+diabetes_X.shape
+
+
+# In[57]:
+
+
+plt.scatter(diabetes_X[:, 5], diabetes_y)
+
+
+# In[67]:
+
+
+## Linear Regression
 
 # Use only one feature
 diabetes_X = diabetes_X[:, np.newaxis, 2]
@@ -82,13 +99,13 @@ diabetes_y_train = diabetes_y[:-20]
 diabetes_y_test = diabetes_y[-20:]
 
 # Create linear regression object
-regr = linear_model.LinearRegression()
+regr_l = linear_model.LinearRegression()
 
 # Train the model using the training sets
-regr.fit(diabetes_X_train, diabetes_y_train)
+regr_l.fit(diabetes_X_train, diabetes_y_train)
 
 # Make predictions using the testing set
-diabetes_y_pred = regr.predict(diabetes_X_test)
+diabetes_y_pred_l = regr_l.predict(diabetes_X_test)
 
 # The coefficients
 print("Coefficients: \n", regr.coef_)
@@ -99,7 +116,7 @@ print("Coefficient of determination: %.2f" % r2_score(diabetes_y_test, diabetes_
 
 # Plot outputs
 plt.scatter(diabetes_X_test, diabetes_y_test, color="black")
-plt.plot(diabetes_X_test, diabetes_y_pred, color="blue", linewidth=3)
+plt.plot(diabetes_X_test, diabetes_y_pred_l, color="blue", linewidth=3)
 
 plt.xticks(())
 plt.yticks(())
@@ -107,19 +124,19 @@ plt.yticks(())
 plt.show()
 
 
-# In[42]:
+# In[68]:
 
 
 ## Ridge Regression
 
 # Create linear regression object
-regr = linear_model.Ridge(alpha=.5)
+regr_r = linear_model.Ridge(alpha=.5)
 
 # Train the model using the training sets
-regr.fit(diabetes_X_train, diabetes_y_train)
+regr_r.fit(diabetes_X_train, diabetes_y_train)
 
 # Make predictions using the testing set
-diabetes_y_pred = regr.predict(diabetes_X_test)
+diabetes_y_pred_r = regr_r.predict(diabetes_X_test)
 
 # The coefficients
 print("Coefficients: \n", regr.coef_)
@@ -130,7 +147,7 @@ print("Coefficient of determination: %.2f" % r2_score(diabetes_y_test, diabetes_
 
 # Plot outputs
 plt.scatter(diabetes_X_test, diabetes_y_test, color="black")
-plt.plot(diabetes_X_test, diabetes_y_pred, color="blue", linewidth=3)
+plt.plot(diabetes_X_test, diabetes_y_pred_r, color="blue", linewidth=3)
 
 plt.xticks(())
 plt.yticks(())
@@ -142,11 +159,20 @@ plt.show()
 # 
 # Plot the two together
 
+# In[70]:
+
+
+plt.scatter(diabetes_X_test, diabetes_y_test, color="black")
+plt.plot(diabetes_X_test, diabetes_y_pred_l, linewidth=3, label='linear')
+plt.plot(diabetes_X_test, diabetes_y_pred_r, linewidth=3, label='ridge')
+plt.legend()
+
+
 # ### Dataset
 # 
 # We will use the boston housing dataset which is already preloaded as a scikit learn in-built dataset
 
-# In[6]:
+# In[72]:
 
 
 #data
@@ -158,21 +184,21 @@ boston_df['Price']=boston.target
 boston_df.head()
 
 
-# In[8]:
+# In[73]:
 
 
 #Data dimension
 boston_df.shape
 
 
-# In[10]:
+# In[74]:
 
 
 #deescriptives
 boston_df.describe()
 
 
-# In[11]:
+# In[75]:
 
 
 #Exploration
@@ -190,20 +216,20 @@ sns.heatmap(boston_df.corr(), annot = True)
 # 
 # However, we see strong correlation between features (x) which is termed multicolinearity. We will need to drop some columns leading to these strong correlations values. Y
 
-# In[12]:
+# In[76]:
 
 
 #There are cases of multicolinearity, we will drop a few columns
 boston_df.drop(columns = ["INDUS", "NOX"], inplace = True)
 
 
-# In[14]:
+# In[77]:
 
 
 boston_df.head()
 
 
-# In[15]:
+# In[78]:
 
 
 #pairplot
@@ -212,14 +238,14 @@ sns.pairplot(boston_df)
 
 # Variables should be normally distributed and linear. However, the relationship between LSTAT and Price is nonlinear. Hence, we log it.
 
-# In[17]:
+# In[79]:
 
 
 #we will log the LSTAT Column
 boston_df.LSTAT = np.log(boston_df.LSTAT)
 
 
-# In[19]:
+# In[80]:
 
 
 #pairplot again
@@ -229,7 +255,7 @@ sns.pairplot(boston_df)
 
 # ### Data split and scaling
 
-# In[20]:
+# In[81]:
 
 
 #preview
@@ -251,15 +277,6 @@ X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 
-# In[22]:
-
-
-#Scale features
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
-
-
 # ### Model fitting
 # 
 # 
@@ -268,7 +285,7 @@ X_test = scaler.transform(X_test)
 # 
 # Compare results
 
-# In[36]:
+# In[84]:
 
 
 #Model
@@ -290,19 +307,36 @@ print("The train score for lr model is {}".format(train_score_lr))
 print("The test score for lr model is {}".format(test_score_lr))
 
 
+# In[86]:
+
+
+y_pred.shape
+
+
 # ### Exercise
 # 
 # - Plot the test and predicted data
 # - How well does linear regression performs?
 
-# In[26]:
+# In[91]:
 
+
+plt.scatter(X_train[:,0], y_train, label='training')
+plt.scatter(X_test[:,0], y_test, label='test')
+plt.scatter(X_test[:,0], y_pred, label='predict')
+plt.legend()
+
+
+# In[100]:
 
 
 #Ridge Regression Model
-ridgeReg = Ridge(alpha=10)
+ridgeReg = Ridge(alpha=20)
 
 ridgeReg.fit(X_train,y_train)
+
+# predict
+y_pred_r = ridgeReg.predict(X_test)
 
 #train and test scorefor ridge regression
 train_score_ridge = ridgeReg.score(X_train, y_train)
@@ -311,6 +345,16 @@ test_score_ridge = ridgeReg.score(X_test, y_test)
 print("\nRidge Model............................................\n")
 print("The train score for ridge model is {}".format(train_score_ridge))
 print("The test score for ridge model is {}".format(test_score_ridge))
+
+
+# In[101]:
+
+
+#plt.scatter(X_train[:,0], y_train, label='training')
+plt.scatter(X_test[:,0], y_test, label='test')
+plt.scatter(X_test[:,0], y_pred_r, label='predict ridge')
+plt.scatter(X_test[:,0], y_pred, label='predict', alpha=0.5)
+plt.legend()
 
 
 # ### Exercise
