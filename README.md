@@ -1,6 +1,9 @@
 # Python for Scientists 
 ### Department of Civil, Chemical and Environmental Engineering DICCA | University of Genoa, Italy 
 
+#### 4th Edition - March 2024
+This repository includes, on the branch 2023_2rd-edition, the material given on the "Python for Scientists" course held at the Dipartment of Department of Civil, Chemical and Environmental Engineering (DICCA) of the University of Genoa on February 2023.
+
 #### 3rd Edition - February 2023
 This repository includes, on the branch 2023_2rd-edition, the material given on the "Python for Scientists" course held at the Dipartment of Department of Civil, Chemical and Environmental Engineering (DICCA) of the University of Genoa on February 2023.
 
