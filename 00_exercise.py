@@ -55,6 +55,12 @@ np.reshape(weight_normed[:, 0], (50, 1)).shape
 # %%
 (weight_normed[:, 0][:, np.newaxis] - weight_normed[:, 1:]).shape
 
+# %%
+dm1 = np.sqrt((weight_normed[:, 0][:, np.newaxis] - weight_normed[:, 1])**2 + 
+            (size_normed[:, 0][:, np.newaxis] - size_normed[:, 1])**2 +
+            (speed_normed[:, 0][:, np.newaxis] - speed_normed[:, 1])**2)
+dm1
+
 # %% [markdown]
 # #### Plot 3,2 plots of weights, sizes, and speed of the mice
 # 
