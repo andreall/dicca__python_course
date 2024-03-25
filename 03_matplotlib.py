@@ -56,7 +56,7 @@ plt.plot(x, y)
 # The ``plot`` function is actually quite complex, and for example can take arguments specifying the type of point, the color of the line, and the width of the line:
 
 # %%
-plt.plot(x, y, marker='o', color='green', linewidth=4, linestyle='--')
+plt.plot(x, y, 'royalblue', linestyle='--', marker='o', linewidth=4) # m, c, lw, ls
 
 # %% [markdown]
 # plt.plot(x, y, 'o', color='k')
@@ -65,6 +65,7 @@ plt.plot(x, y, marker='o', color='green', linewidth=4, linestyle='--')
 # The line can be hidden with:
 
 # %%
+plt.figure()
 plt.plot(x, y,linewidth=0, color='green',  marker='+')
 plt.plot(x+1, y,linewidth=0, color='red',  marker='o')
 
@@ -86,8 +87,8 @@ plt.plot(X, S)
 fig = plt.figure()
 ax = fig.axes
 
-fig, ax = plt.subplots()
-ax.plot(X, S)
+fig, ax = plt.subplots() #---> let's you define many subplots
+ax.plot(X, S) # instead of plt.plot(), you do ax.plot()
 
 # %% [markdown]
 # ## Customizing plots
@@ -138,8 +139,8 @@ ax.plot(X, S)
 # Create a figure of size 8x6 inches, 80 dots per inch
 plt.figure(figsize=(8, 6), dpi=80)
 
-# Create a new subplot from a grid of 1x1
-plt.subplot(1, 2, 1)
+# Create a new subplot from a grid of 1x2
+# plt.subplot(1, 2, 1)
 
 X = np.linspace(-np.pi, np.pi, 256)
 C, S = np.cos(X), np.sin(X)
@@ -166,16 +167,20 @@ plt.yticks(np.linspace(-1, 1, 5))
 plt.xlabel('x values')
 plt.ylabel('y values')
 
+# plt.subplot(1, 2, 2)
+
 # ax.set_xlabel()
 # axes[0].set_xlabel()
 # axs[0, 1].set_xlabel()
 
 
 # %%
-plt.plot(X, C, color="blue", linewidth=2.5, linestyle="-", label="cosineAA")
-plt.plot(X, S, color="red",  linewidth=2.5, linestyle="-", label="sineBB")
+plt.plot(X, C, color="blue", linewidth=2.5, linestyle="-", label="cosine")
+plt.plot(X, S, color="red",  linewidth=2.5, linestyle="-", label="sine")
 
-plt.legend(loc='upper left', bbox_to_anchor=(0.5, 0.99), ncol=1, frameon=True) # upper center lower / left right
+# plt.legend(loc='upper left', ncol=2, frameon=True, title='Trig') # upper center lower / left right
+
+plt.legend(loc='lower center', bbox_to_anchor=(0.5, 0.99), ncol=2, frameon=True) # upper center lower / left right
 
 
 # %%
@@ -198,7 +203,41 @@ data[data<0] = np.NaN
 
 # %%
 yy = data[:, 0]
+mm = data[:, 1]
+dd = data[:, 2]
 hs = data[:, 4]
+
+# %%
+plt.plot(hs)
+plt.ylabel('Hs (m)')
+
+# %%
+hsmax = np.nanmax(hs)
+posmax1 = hs == hsmax
+
+# %%
+pos = np.arange(len(hs))
+
+# %%
+plt.plot(hs)
+# plt.plot(pos[posmax1], hs[posmax1], '*', ms=10)
+plt.plot(np.nanargmax(hs), np.nanmax(hs), '+', ms=10)
+plt.ylabel('Hs (m)')
+
+# %%
+# Remove NaNs 
+plt.plot(hs)
+hs[np.isnan(hs)] = 0
+plt.plot(hs.argmax(), hs.max(), 'go')
+# hs.argmax is the same as np.where(hs == np.max(hs))
+
+# %%
+plt.figure(figsize=(20, 10))
+plt.plot(hs)
+
+mask = hs == np.nanmax(hs)
+ind = int(np.where(hs == np.nanmax(hs))[0])
+plt.plot(ind, hs[mask], 'go')
 
 # %% [markdown]
 # ## Other types of plots
@@ -215,6 +254,12 @@ y = np.random.random(100)
 plt.scatter(x, y)
 # ax.scatter()
 
+# %%
+plt.scatter(data[:,4], data[:, 5])
+
+# %%
+
+
 # %% [markdown]
 # ### Errorbar
 
@@ -222,12 +267,12 @@ plt.scatter(x, y)
 ###  generate some random data
 xdata2 = np.arange(15)
 ydata2 = np.random.randn(15)
-yerrors = np.random.randn(15)
+yerrors = np.random.uniform(0, 1, 15)
 
 ###  initialize the figure
 fig, ax = plt.subplots()
 
-ax.errorbar(xdata2, ydata2, yerr=yerrors)
+ax.errorbar(xdata2, ydata2, yerr=yerrors)#, xerr=yerrors)
 ax.grid()
 #ax.grid(color='royalblue', linewidth=5)
 
@@ -251,19 +296,25 @@ plt.errorbar(xdata2, ydata2, yerr=yerrors, ls='',         # no lines connecting 
 # Histograms are easy to plot using the ``hist`` function:
 
 # %%
-v = np.random.uniform(0., 600., 500)
+np.random.uniform(0, 600, 500)
+
+# %%
+v = np.random.uniform(0, 600., 500)
 h = plt.hist(v, bins='auto')  
 # we do h= to capture the output of the function, but we don't use it
 # bins = 'auto' (default), array, list (np.linspace(x, y, nn), int (number of bins))
 
 # %%
+h = plt.hist(v, bins=5)  
+
+# %%
 np.histogram(v, bins=np.linspace(0, 600, 20))
 
 # %%
-h = plt.hist(v, bins='auto', density=True, cumulative=True)  
+plt.hist(v, bins='auto', density=True, cumulative=True)  
 
 # %%
-h
+h[1]
 
 # %%
 h = plt.hist(v, range=[-5., 15.], bins=100)
@@ -279,7 +330,7 @@ h = plt.hist(v, orientation='horizontal')
 
 # %%
 array = np.random.random((64, 64))
-plt.imshow(array, cmap='Reds') # pcolormesh
+plt.imshow(array, cmap='viridis') # pcolormesh
 plt.colorbar()
 
 # %% [markdown]
@@ -289,6 +340,9 @@ plt.colorbar()
 import cmocean as cmo
 plt.imshow(array, cmap=cmo.cm.haline)
 plt.colorbar(label='hola')
+plt.xlabel('var 1')
+plt.ylabel('var 2')
+
 
 # %% [markdown]
 # ### Contour
@@ -300,7 +354,7 @@ def f(x,y):
 n = 256
 x = np.linspace(-3, 3, n)
 y = np.linspace(-3, 3, n)
-X,Y = np.meshgrid(x, y)
+X,Y = np.meshgrid(x, y) 
 
 z = f(x, y)
 #print(z.size)
@@ -310,13 +364,17 @@ Z = f(X, Y)
 
 plt.axes([0.025, 0.025, 0.95, 0.95])
 
-plt.contourf(X, Y, f(X, Y), 8, alpha=.5, cmap='Reds')
+p = plt.contourf(X, Y, f(X, Y), 8, alpha=.5, cmap=cmo.cm.deep)
 C = plt.contour(X, Y, f(X, Y), 8,  colors='k', linewidth=.5)
 plt.clabel(C, inline=1, fontsize=15)
+plt.colorbar(p)
 
 #plt.xticks([])
 #plt.yticks([])
 #plt.show()
+
+# %%
+Z
 
 # %% [markdown]
 # ### Polar plots
@@ -354,12 +412,12 @@ ax.set_title('Simple plot')
 
 # %%
 # Create two subplots and unpack the output array immediately
-f, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
+f, (ax1, ax2) = plt.subplots(2, 1, sharey=True, sharex=True) # sharey = True, 'rows', None
 # f, axs = plt.subplots(1, 2, sharey=True)
 # axs[0, 0], axs[0, 1]
 ax1.plot(x, y)
 ax1.set_title('Sharing Y axis')
-ax2.scatter(x, y)
+ax2.scatter(x, y+10)
 
 # %%
 # Create four polar axes and access them through the returned array
@@ -379,6 +437,16 @@ plt.subplots(2, 2, sharex='all', sharey='all')
 
 # Note that this is the same as
 plt.subplots(2, 2, sharex=True, sharey=True)
+
+# %%
+fig, axs = plt.subplots(2, 2)
+axs[0, 0].plot([1, 2, 3])
+axs[0, 1].plot([1, 2, 3])
+axs[1, 0].plot([1, 2, 3])
+axs[1, 1].remove()
+
+# %%
+# GridSpec
 
 # %% [markdown]
 # ## Saving plots to files
@@ -438,5 +506,75 @@ fig.savefig('img/myplot.png')
 # 1. Make a figure of two subplots. 
 # 2. On the first subplot you can plot Hm0.
 # 3. On the second one, plot the histogram of Hm0. Try changing the number of bins and try plotting the CDF on top of it (with a line not bars).
+
+# %%
+plt.hist?
+
+# %%
+fig, axs = plt.subplots(1, 2)
+axs[0].plot(data[:, 4])
+axs[0].set_ylabel('Hm0 (m)')
+axs[0].grid()
+axs[1].hist(data[:, 4], bins=10, density=True)
+axs[1].hist(data[:, 4], bins='auto', density=True, cumulative=True, histtype='step', lw=3)
+axs[1].grid()
+
+# %%
+
+
+# %%
+
+
+# %%
+
+
+# %%
+
+
+# %%
+
+
+# %%
+
+
+# %%
+
+
+# %%
+
+
+# %%
+
+
+# %%
+
+
+# %%
+# data = hs
+fig, (ax1, ax2) = plt.subplots(1, 2)
+h = ax1.hist(hs, bins='auto')
+h = ax2.hist(hs, bins='auto', density='True', cumulative='True')
+
+# %%
+#fig, (ax1, ax2) = plt.subplots(1, 2)
+#h = ax1.hist(hs, bins='auto', density=True)
+h1 = plt.hist(hs, bins='auto', density=True, cumulative=True)
+#index = h1[1] + np.diff(h1[1])
+#ax1.plot(h1[1], h1[0], '*', color='red')
+
+# %%
+Y = h1[0]
+bins = h1[1]
+
+# %%
+binsc = bins[0:-1] + np.diff(bins)
+
+# %%
+plt.hist(hs, bins='auto', density=True)
+plt.plot(binsc, Y)
+
+# %%
+plt.hist(hs, bins='auto', density=True)
+plt.hist(hs, bins='auto', density=True, cumulative=True, histtype='step')
 
 
