@@ -1,16 +1,13 @@
-#!/usr/bin/env python
-# coding: utf-8
-
+# %% [markdown]
 # # Introduction to Matplotlib
 
+# %% [markdown]
 # The **Matplotlib** package can be used to make scientific-grade plots. You can import it with:
 
-# In[1]:
-
-
+# %%
 import matplotlib.pyplot as plt
 
-
+# %% [markdown]
 # If you are using IPython and you want to make interactive plots, you can start up IPython with:
 # 
 #     ipython --matplotlib
@@ -19,81 +16,65 @@ import matplotlib.pyplot as plt
 # 
 # If you use the IPython notebook, add a cell containing:
 
-# In[2]:
+# %%
+%matplotlib inline
 
-
-get_ipython().run_line_magic('matplotlib', 'inline')
-
-
+# %% [markdown]
 # and the plots will appear inside the notebook.
 
+# %% [markdown]
 # ## Basic plotting
 
+# %% [markdown]
 # The main plotting function is called ``plot``:
 
-# In[2]:
-
-
+# %%
 plt.plot([1,2,3,6,4,2,3,4])
 
-
+# %% [markdown]
 # In the above example, we only gave a single list, so it will assume the x values are the indices of the list/array.
 
+# %% [markdown]
 # However, we can instead specify the x values:
 
-# In[4]:
-
-
+# %%
 plt.plot([3.3, 4.4, 4.5, 6.5], [3., 5., 6., 7.])
 
-
-# In[ ]:
-
-
+# %%
 # plt.show()
 
-
+# %% [markdown]
 # Matplotlib can take Numpy arrays, so we can do for example:
 
-# In[2]:
-
-
+# %%
 import numpy as np
 x = np.linspace(0., 10., 50)
 y = np.sin(x)
 plt.plot(x, y)
 
-
+# %% [markdown]
 # The ``plot`` function is actually quite complex, and for example can take arguments specifying the type of point, the color of the line, and the width of the line:
 
-# In[11]:
-
-
+# %%
 plt.plot(x, y, marker='o', color='green', linewidth=4, linestyle='--')
 
-
+# %% [markdown]
 # plt.plot(x, y, 'o', color='k')
 
+# %% [markdown]
 # The line can be hidden with:
 
-# In[14]:
-
-
+# %%
 plt.plot(x, y,linewidth=0, color='green',  marker='+')
 plt.plot(x+1, y,linewidth=0, color='red',  marker='o')
 
-
+# %% [markdown]
 # If you are interested, you can specify some of these attributes with a special syntax, which you can read up more about in the Matplotlib documentation:
 
-# In[3]:
-
-
+# %%
 plt.plot(x, y, 'go')  # means green and circles
 
-
-# In[4]:
-
-
+# %%
 X = np.linspace(-np.pi, np.pi, 256)
 C, S = np.cos(X), np.sin(X)
 
@@ -108,9 +89,10 @@ ax = fig.axes
 fig, ax = plt.subplots()
 ax.plot(X, S)
 
-
+# %% [markdown]
 # ## Customizing plots
 
+# %% [markdown]
 # ### fig, axs = plt.subplots(nrows, ncols, figsize=(8, 6), .....)
 # 
 # e.g. 
@@ -152,9 +134,7 @@ ax.plot(X, S)
 # 1, 2 --> plt.subplot(2, 3, 2)
 # 
 
-# In[11]:
-
-
+# %%
 # Create a figure of size 8x6 inches, 80 dots per inch
 plt.figure(figsize=(8, 6), dpi=80)
 
@@ -191,96 +171,54 @@ plt.ylabel('y values')
 # axs[0, 1].set_xlabel()
 
 
-# In[17]:
-
-
+# %%
 plt.plot(X, C, color="blue", linewidth=2.5, linestyle="-", label="cosineAA")
 plt.plot(X, S, color="red",  linewidth=2.5, linestyle="-", label="sineBB")
 
 plt.legend(loc='upper left', bbox_to_anchor=(0.5, 0.99), ncol=1, frameon=True) # upper center lower / left right
 
 
-# In[18]:
-
-
+# %%
 h1 = plt.plot(X, C, color="blue", linewidth=2.5, linestyle="-")
 h2 = plt.plot(X, S, color="red",  linewidth=2.5, linestyle="-")
 
 plt.legend(['cosine', 'sine'], loc='lower center', ncol=2, frameon=False) # upper center lower / left right
 
-
+# %% [markdown]
 # ## Exercise
 # 
 # Start off by loading the ``data/SIMAR_gaps.txt`` (Numpy lecture):
 # 1. Plot Hm0 (complete series)
 # 2. Plot Hm0 and, on top, plot the markers of the annual maximum values
 
-# In[25]:
-
-
+# %%
 import numpy as np
 data = np.loadtxt('data/SIMAR_gaps.txt', skiprows=1)
 data[data<0] = np.NaN
 
-
-# In[49]:
-
-
+# %%
 yy = data[:, 0]
 hs = data[:, 4]
 
-
-# In[58]:
-
-
-plt.plot(hs)
-hs[np.isnan(hs)] = 0
-plt.plot(hs.argmax(), hs.max(), 'go')
-
-# hs.argmax is the same as np.where(hs == np.max(hs))
-
-
-# In[48]:
-
-
-plt.figure(figsize=(20, 10))
-plt.plot(hs)
-
-mask = hs == np.nanmax(hs)
-ind = int(np.where(hs == np.nanmax(hs))[0])
-plt.plot(ind, hs[mask], 'go')
-
-
-# In[35]:
-
-
-plt.figure(figsize=(20, 10))
-plt.plot(hs)
-
-index = int(np.where(hs == np.nanmax(hs))[0])
-plt.plot(index, hs[index], 'go')
-
-
+# %% [markdown]
 # ## Other types of plots
 
+# %% [markdown]
 # ### Scatter plots
 
+# %% [markdown]
 # While the ``plot`` function can be used to show scatter plots, it is mainly used for line plots, and the ``scatter`` function is more often used for scatter plots, because it allows more fine control of the markers:
 
-# In[37]:
-
-
+# %%
 x = np.random.random(100)
 y = np.random.random(100)
 plt.scatter(x, y)
 # ax.scatter()
 
-
+# %% [markdown]
 # ### Errorbar
 
-# In[61]:
-
-
+# %%
 ###  generate some random data
 xdata2 = np.arange(15)
 ydata2 = np.random.randn(15)
@@ -293,10 +231,7 @@ ax.errorbar(xdata2, ydata2, yerr=yerrors)
 ax.grid()
 #ax.grid(color='royalblue', linewidth=5)
 
-
-# In[64]:
-
-
+# %%
 # linestyle = ls; color=c, marker=m
 plt.errorbar(xdata2, ydata2, yerr=yerrors, ls='',         # no lines connecting points
              elinewidth=2,  # error line width
@@ -309,77 +244,56 @@ plt.errorbar(xdata2, ydata2, yerr=yerrors, ls='',         # no lines connecting 
                                 
                                                capsize=6)     # error hat sizex
 
-
+# %% [markdown]
 # ### Histograms
 
+# %% [markdown]
 # Histograms are easy to plot using the ``hist`` function:
 
-# In[76]:
-
-
+# %%
 v = np.random.uniform(0., 600., 500)
 h = plt.hist(v, bins='auto')  
 # we do h= to capture the output of the function, but we don't use it
 # bins = 'auto' (default), array, list (np.linspace(x, y, nn), int (number of bins))
 
-
-# In[75]:
-
-
+# %%
 np.histogram(v, bins=np.linspace(0, 600, 20))
 
-
-# In[81]:
-
-
+# %%
 h = plt.hist(v, bins='auto', density=True, cumulative=True)  
 
-
-# In[82]:
-
-
+# %%
 h
 
-
-# In[83]:
-
-
+# %%
 h = plt.hist(v, range=[-5., 15.], bins=100)
 
-
-# In[84]:
-
-
+# %%
 h = plt.hist(v, orientation='horizontal')
 
-
+# %% [markdown]
 # ### Images
 
+# %% [markdown]
 # You can also show two-dimensional arrays with the ``imshow`` function:
 
-# In[85]:
-
-
+# %%
 array = np.random.random((64, 64))
 plt.imshow(array, cmap='Reds') # pcolormesh
 plt.colorbar()
 
-
+# %% [markdown]
 # And the colormap can be changed:
 
-# In[86]:
-
-
+# %%
 import cmocean as cmo
 plt.imshow(array, cmap=cmo.cm.haline)
 plt.colorbar(label='hola')
 
-
+# %% [markdown]
 # ### Contour
 
-# In[98]:
-
-
+# %%
 def f(x,y):
     return (1 - x / 2 + x**5 + y**3) * np.exp(-x**2 -y**2)
 
@@ -404,12 +318,10 @@ plt.clabel(C, inline=1, fontsize=15)
 #plt.yticks([])
 #plt.show()
 
-
+# %% [markdown]
 # ### Polar plots
 
-# In[99]:
-
-
+# %%
 ax = plt.axes([0.025, 0.025, 0.95, 0.95], polar=True)
 
 N = 20
@@ -427,12 +339,10 @@ ax.set_xticklabels([])
 ax.set_yticklabels([])
 plt.show()
 
-
+# %% [markdown]
 # ### Multiplots
 
-# In[100]:
-
-
+# %%
 # First create some toy data:
 x = np.linspace(0, 2*np.pi, 400)
 y = np.sin(x**2)
@@ -442,10 +352,7 @@ fig, ax = plt.subplots()
 ax.plot(x, y)
 ax.set_title('Simple plot')
 
-
-# In[101]:
-
-
+# %%
 # Create two subplots and unpack the output array immediately
 f, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
 # f, axs = plt.subplots(1, 2, sharey=True)
@@ -454,19 +361,13 @@ ax1.plot(x, y)
 ax1.set_title('Sharing Y axis')
 ax2.scatter(x, y)
 
-
-# In[103]:
-
-
+# %%
 # Create four polar axes and access them through the returned array
 fig, axs = plt.subplots(2, 2, subplot_kw=dict(projection="polar"))
 axs[0, 0].plot(x, y)
 axs[1, 1].scatter(x, y)
 
-
-# In[104]:
-
-
+# %%
 # Share a X axis with each column of subplots
 plt.subplots(2, 2, sharex='col')
 
@@ -479,14 +380,13 @@ plt.subplots(2, 2, sharex='all', sharey='all')
 # Note that this is the same as
 plt.subplots(2, 2, sharex=True, sharey=True)
 
-
+# %% [markdown]
 # ## Saving plots to files
 
+# %% [markdown]
 # To save a plot to a file, you can do for example:
 
-# In[110]:
-
-
+# %%
 from pathlib import Path
 dir_pics = Path('img')
 plt.savefig('my_plot1.png', bbox_inches='tight', dpi=300)
@@ -494,15 +394,17 @@ fig.savefig(dir_pics / 'my_plot.png')
 fig.savefig('img/myplot.png')
 # pdf, png, eps, 
 
-
+# %% [markdown]
 # and you can then view the resulting file like you would iew a normal image. On Linux, you can also do:
 # 
 #     $ xv my_plot.png
 # 
 # in the terminal.
 
+# %% [markdown]
 # ## Learning more
 
+# %% [markdown]
 # The easiest way to find out more about a function and available options is to use the ``?`` help in IPython:
 # 
 #         In [11]: plt.hist?
@@ -529,54 +431,12 @@ fig.savefig('img/myplot.png')
 # But sometimes you don't even know how to make a specific type of plot, in which case you can look at the [Matplotlib Gallery](http://matplotlib.org/gallery.html) for example plots and scripts.
 # 
 
+# %% [markdown]
 # ## Exercise
 
+# %% [markdown]
 # 1. Make a figure of two subplots. 
 # 2. On the first subplot you can plot Hm0.
 # 3. On the second one, plot the histogram of Hm0. Try changing the number of bins and try plotting the CDF on top of it (with a line not bars).
 
-# In[115]:
-
-
-# data = hs
-fig, (ax1, ax2) = plt.subplots(1, 2)
-h = ax1.hist(hs, bins='auto')
-h = ax2.hist(hs, bins='auto', density='True', cumulative='True')
-
-
-# In[125]:
-
-
-#fig, (ax1, ax2) = plt.subplots(1, 2)
-#h = ax1.hist(hs, bins='auto', density=True)
-h1 = plt.hist(hs, bins='auto', density=True, cumulative=True)
-#index = h1[1] + np.diff(h1[1])
-#ax1.plot(h1[1], h1[0], '*', color='red')
-
-
-# In[130]:
-
-
-Y = h1[0]
-bins = h1[1]
-
-
-# In[135]:
-
-
-binsc = bins[0:-1] + np.diff(bins)
-
-
-# In[139]:
-
-
-plt.hist(hs, bins='auto', density=True)
-plt.plot(binsc, Y)
-
-
-# In[141]:
-
-
-plt.hist(hs, bins='auto', density=True)
-plt.hist(hs, bins='auto', density=True, cumulative=True, histtype='step')
 
