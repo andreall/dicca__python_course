@@ -1,5 +1,4 @@
 # %% [markdown]
-# ![xarray Logo](http://xarray.pydata.org/en/stable/_static/dataset-diagram-logo.png "xarray Logo")
 # 
 # # Introduction to Xarray
 
@@ -62,7 +61,7 @@ temp
 
 # %%
 temp = xr.DataArray(data, dims=['time', 'lat', 'lon'])
-temp.lat
+temp
 
 # %% [markdown]
 # This is already improved upon from a NumPy array, because we have names for each of the dimensions (or axes in NumPy parlance). Even better, we can take arrays representing the values for the coordinates for each of these dimensions and associate them with the data when we create the `DataArray`. We'll see this in the next example.
@@ -102,6 +101,9 @@ temp
 # ...and while we're at it, we can also set some attribute metadata:
 
 # %%
+# CF conventions ---> standard metadata (attributes)
+
+# %%
 temp.attrs['units'] = 'kelvin'
 temp.attrs['standard_name'] = 'air_temperature'
 
@@ -116,6 +118,7 @@ temp
 
 # %%
 temp_in_celsius = temp - 273.15
+temp_in_celsius.attrs['unit'] = 'degrees'
 temp_in_celsius
 
 # %% [markdown]
@@ -153,7 +156,8 @@ pressure
 # The most straightforward way to create a `Dataset` with our `temp` and `pressure` arrays is to pass a dictionary using the keyword argument `data_vars`:
 
 # %%
-ds = xr.Dataset(data_vars={'Temperature': temp, 'Pressure': pressure})
+ds = xr.Dataset(data_vars={'Temperature': temp, 'Pressure': pressure}) # temp and pressure are xr.DataArrays
+# to create a Dataset I am giving a dictionary {'variable-name':xr.DataArray, ...}
 ds
 
 # %% [markdown]
@@ -202,7 +206,10 @@ indexed_selection
 # We can instead select data based on coordinate values using the `.sel()` method, which takes one or more named coordinate(s) as keyword argument:
 
 # %%
-named_selection = temp.sel(time='2018-01-02')
+temp
+
+# %%
+named_selection = temp.sel(time='2018-01-04', lat=25.0)
 named_selection
 
 # %% [markdown]
@@ -223,18 +230,30 @@ named_selection
 # `.sel` has the flexibility to perform nearest neighbor sampling, taking an optional tolerance:
 
 # %%
-temp.sel(time='2018-01-07', method='nearest', tolerance=timedelta(days=2))
+temp
+
+# %%
+temp.sel(time='2018-01-07', method='nearest', tolerance=timedelta(days=3))
+
+#try:
+#    temp.sel(time='2018-01-07', method='nearest', tolerance=timedelta(days=1))
+#except:
+#    print('BAD')
+    
 
 # %% [markdown]
 # where we see that `.sel` indeed pulled out the data for date `2018-01-05`.
+
+# %%
+temp.sel(lat=10, method='nearest', tolerance=20)
 
 # %% [markdown]
 # #### Interpolation
 # 
 # The `.interp()` method (see the docs [here](http://xarray.pydata.org/en/stable/interpolation.html)) works similarly to `.sel()`. Using `.interp()`, we can interpolate to any latitude/longitude location:
 
-# %% [markdown]
-# 
+# %%
+xr.Dataset.interp?
 
 # %%
 temp.interp(lon=-105, lat=40)
@@ -251,9 +270,9 @@ temp.interp(lon=-105, lat=40)
 # Frequently we want to select a range (or _slice_) along one or more coordinate(s). We can achieve this by passing a Python [slice](https://docs.python.org/3/library/functions.html#slice) object to `.sel()`, as follows:
 
 # %%
-temp.sel(
-    time=slice('2018-01-01', '2018-01-03'), lon=slice(-110, -70), lat=slice(25, 45)
-)
+temp.sel(lat=slice(25, None), 
+    time=slice('2018-01-01', '2018-01-03'), lon=slice(-110, -70), 
+)   # ['2018-01-01':'2018-01-03', -110:-70, 25:]
 
 # %% [markdown]
 # <div class="admonition alert alert-info">
@@ -263,6 +282,9 @@ temp.sel(
 
 # %% [markdown]
 # Notice how the length of each coordinate axis has changed due to our slicing.
+
+# %%
+timedelta(days=1)
 
 # %% [markdown]
 # ### One more selection method: `.loc`
@@ -290,6 +312,9 @@ temp.loc['2018-01-01':'2018-01-03', 25:45, -110:-70]
 
 # %%
 temp.loc['2018-01-01':'2018-01-03', slice(25, 45), -110:-70]
+
+# %%
+temp.isel(time=slice(0, 3))
 
 # %% [markdown]
 # What *doesn't* work is passing the slices in a different order:
@@ -327,17 +352,21 @@ temp.loc['2018-01-01':'2018-01-03', slice(25, 45), -110:-70]
 # 
 # dir_data = Path('currents_liguria')
 # 
-# xr.open_dataset(dir_data / 'currents_01012010.nc')  
+# xr.open_dataset(dir_data / 'currents_01012010.nc')  # dask
 # xr.load_dataset(dir_data / 'currents_01012010.nc')
 # 
 # xr.open_dataarray(dir_data / 'uo_currents_01012010.nc')
 # 
 # xr.open_mfdataset(dir_data.glob('currents_*.nc'))
-# xr.open_mfdataset(dir_data.glob('currents_*2010.nc'))
+# xr.open_mfdataset(dir_data.glob('currents_*2010.nc'), parallel=True)  # dask.client
 # 
 # xr.open_mfdataset('XXX*.grb2', engine='cfgrib')
 # 
 # 
+
+# %%
+import xarray as xr
+import pandas as pd
 
 # %%
 ds = xr.open_mfdataset('data/WW3_mediterr_*.grb2', engine='cfgrib')
@@ -351,7 +380,10 @@ ds
 # %%
 ds = xr.open_dataset('data/NARR_19930313_0000.nc')
 
-ds.isobaric1
+ds
+
+# %%
+ds.Geopotential_height_isobaric
 
 # %% [markdown]
 # (recall that we can also use dictionary syntax like `ds['isobaric1']` to do the same thing)
@@ -375,6 +407,9 @@ ds_1000.Temperature_isobaric
 # Not only can you use the named dimensions for manual slicing and indexing of data, but you can also use it to control aggregation operations, like `std` (standard deviation):
 
 # %%
+xr.Dataset.std?
+
+# %%
 u_winds = ds['u-component_of_wind_isobaric']
 u_winds.std(dim=['x', 'y'])
 
@@ -392,10 +427,16 @@ u_winds.std(dim=['x', 'y'])
 # (37°N to 41°N and 102°W to 109°W projected to Lambert Conformal projection coordinates)
 
 # %%
+ds.mean(dim='isobaric1')
+
+# %%
 temps = ds.Temperature_isobaric
 co_temps = temps.sel(x=slice(-182, 424), y=slice(-1450, -990))
 prof = co_temps.mean(dim=['x', 'y'])
 prof
+
+# %%
+ds.Temperature_isobaric.sel(x=slice(-182, 424), y=slice(-1450, -990)).mean(dim=['x', 'y']).plot(y='isobaric1')
 
 # %% [markdown]
 # ## Plotting with Xarray
@@ -445,5 +486,8 @@ temps.sel(isobaric1=1000).plot()
 
 # %% [markdown]
 # ---
+
+# %%
+
 
 
