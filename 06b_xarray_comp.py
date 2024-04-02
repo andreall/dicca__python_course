@@ -17,12 +17,12 @@ xr.__version__
 
 # %%
 # ds = xr.open_dataset('https://my.cmems-du.eu/thredds/dodsC/cmems_mod_glo_phy_my_0.083_P1M-m')
-ds = xr.open_dataset('data/CESM2_sst_data.nc')
+ds = xr.open_dataset('data/NARR_19930313_0000.nc')
 ds
 
 
 # %%
-
+ds1 = ds['u-component_of_wind_isobaric']
 
 # %% [markdown]
 # ## Arithmetic Operations
@@ -30,13 +30,13 @@ ds
 # Arithmetic operations with a single DataArray automatically apply over all array values (like NumPy). This process is called vectorization.  Let's convert the air temperature from degrees Celsius to kelvins:
 
 # %%
-ds.tos + 273.15
+ds1 + 273.15
 
 # %% [markdown]
 # Lets's square all values in `tos`:
 
 # %%
-ds.tos**2
+ds1**2
 
 # %% [markdown]
 # ## Aggregation Methods 
@@ -48,31 +48,31 @@ ds.tos**2
 # Compute the mean:
 
 # %%
-ds.tos.mean()
+ds1.mean()
 
 # %% [markdown]
 # Because we specified no `dim` argument the function was applied over all dimensions, computing the mean of every element of `tos` across time and space. It is possible to specify a dimension along which to compute an aggregation. For example, to calculate the mean in time for all locations, specify the time dimension as the dimension along which the mean should be calculated:
 
 # %%
-ds.tos.mean(dim='time').plot(size=7);
+ds1.mean(dim='isobaric1').plot(size=7);
 
 # %% [markdown]
-# Compute the temporal min:
+# Compute the min:
 
 # %%
-ds.tos.min(dim=['time'])
+ds1.min(dim=['x'])
 
 # %% [markdown]
 # Compute the spatial sum:
 
 # %%
-ds.tos.sum(dim=['lat', 'lon'])
+ds1.sum(dim=['x', 'y'])
 
 # %% [markdown]
 # Compute the temporal median:
 
 # %%
-ds.tos.median(dim='time')
+ds1.median(dim='x')
 
 # %% [markdown]
 # The following table summarizes some other built-in xarray aggregations:
@@ -106,7 +106,7 @@ ds.tos.median(dim='time')
 # First, let's select a gridpoint closest to a specified lat-lon, and plot a time series of SST at that point. The annual cycle will be quite evident.
 
 # %%
-ds.tos.sel(lon=310, lat=50, method='nearest').plot();
+ds1.sel(x=310, y=50, method='nearest').plot();
 
 # %% [markdown]
 # ### Split
@@ -115,7 +115,11 @@ ds.tos.sel(lon=310, lat=50, method='nearest').plot();
 # 
 
 # %%
-ds.tos.groupby(ds.time.dt.month)
+ds1.groupby(ds1.time1.dt.month) # df.index.month (PANDAS) 
+# ds.time.dt.month
+# 'time.month'
+
+
 
 # %% [markdown]
 # <div class="admonition alert alert-info">
@@ -125,10 +129,10 @@ ds.tos.groupby(ds.time.dt.month)
 #    </div>
 
 # %% [markdown]
-# Xarray also offers a more concise syntax when the variable you’re grouping on is already present in the dataset. This is identical to `ds.tos.groupby(ds.time.dt.month)`:
+# Xarray also offers a more concise syntax when the variable you’re grouping on is already present in the dataset. This is identical to `ds1.groupby(ds.time.dt.month)`:
 
 # %%
-ds.tos.groupby('time.month')
+ds1.groupby('time1.month')
 
 # %% [markdown]
 # ### Apply & Combine 
@@ -149,77 +153,33 @@ ds.tos.groupby('time.month')
 # 
 
 # %%
-tos_clim = ds.tos.groupby('time.month').mean()
+tos_clim = ds1.groupby('time1.month').mean()
 tos_clim
 
 # %% [markdown]
 # Plot climatology at a specific point:
 
 # %%
-tos_clim.sel(lon=310, lat=50, method='nearest').plot();
+tos_clim.sel(x=310, y=50, method='nearest').plot();
 
 # %% [markdown]
 # Plot zonal mean climatology:
 
 # %%
-tos_clim.mean(dim='lon').transpose().plot.contourf(levels=12, cmap='turbo');
+tos_clim.mean(dim='isobaric1').isel(month=0).transpose().plot.contourf(levels=12, cmap='turbo');
 
 # %% [markdown]
-# Calculate and plot the difference between January and December climatologies:
+# Calculate and plot the difference between two different levels:
 
 # %%
-(tos_clim.sel(month=1) - tos_clim.sel(month=12)).plot(size=6, robust=True);
-
-# %% [markdown]
-# #### Compute anomaly
-# 
-# Now let's combine the previous steps to compute climatology and use xarray's `groupby` arithmetic to remove this climatology from our original data:
-
-# %%
-gb = ds.tos.groupby('time.month')
-tos_anom = gb - gb.mean(dim='time')
-tos_anom
-
-# %%
-tos_anom.sel(lon=310, lat=50, method='nearest').plot();
+(tos_clim.isel(isobaric1=1) - tos_clim.isel(isobaric1=12)).plot(size=6, robust=True);
 
 # %% [markdown]
 # Let's compute and visualize the mean global anomaly over time. We need to specify both `lat` and `lon` dimensions in the `dim` argument to `mean()`:
 
 # %%
-unweighted_mean_global_anom = tos_anom.mean(dim=['lat', 'lon'])
-unweighted_mean_global_anom.plot();
-
-# %% [markdown]
-# <div class="admonition alert alert-warning">
-#    
-# 
-# An operation which combines grid cells of different size is not scientifically valid unless each cell is weighted by the size of the grid cell. Xarray has a convenient [`.weighted()`](https://xarray.pydata.org/en/stable/user-guide/computation.html#weighted-array-reductions) method to accomplish this
-# 
-# </div>
-# 
-
-# %% [markdown]
-# Let's first load the cell area data from another CESM2 dataset that contains the weights for the grid cells:
-
-# %%
-filepath2 = DATASETS.fetch('CESM2_grid_variables.nc')
-areacello = xr.open_dataset(filepath2).areacello
-areacello
-
-# %% [markdown]
-# As before, let's calculate area-weighted mean global anomaly:
-
-# %%
-weighted_mean_global_anom = tos_anom.weighted(areacello).mean(dim=['lat', 'lon'])
-
-# %% [markdown]
-# Let's plot both unweighted and weighted means:
-
-# %%
-unweighted_mean_global_anom.plot(size=7)
-weighted_mean_global_anom.plot()
-plt.legend(['unweighted', 'weighted']);
+unweighted_mean_global_anom = ds1.mean(dim=['isobaric1'])
+unweighted_mean_global_anom.plot()
 
 # %% [markdown]
 # ## Other high level computation functionality
@@ -247,15 +207,6 @@ ds['time_new'] = pd.to_datetime('2023-01-03')+ ds.step
 ds.swap_dims({'time':'time_new'})
 
 
-# %%
-r = ds.swh.resample({'time':'D'})
-
-# %%
-r
-
-# %%
-r.mean()
-
 # %% [markdown]
 # Compute a 5-month moving average:
 
@@ -270,7 +221,7 @@ lon = 9
 ds_pt = ds.swh.sel(longitude=lon, latitude=lat, method='nearest')
 
 ds_pt.plot()
-ds_pt.resample(indexer={'time':'D'}).mean().plot()
+#ds_pt.resample({'time':'D'}).mean().plot()
 ds_pt.rolling(time=12, center=True).mean().plot()
 plt.legend(['Time series', 'Daily mean', '12-H rolling mean'])
 
@@ -334,31 +285,6 @@ sample.where(
     (sample.latitude < 44) & (sample.latitude > 36) & 
     (sample.longitude > 0) & (sample.longitude < 25)
 ).plot()
-
-# %%
-ds.sel(latitude=slice(44, 36), longitude=slice(0, 25)).resample({'time': 'D'}).mean().swh.plot(col='time', col_wrap=4)
-
-# %%
-ds.swh.where(ds.swh>1).resample({'time': 'D'}).mean().plot(col='time', col_wrap=4)
-
-# %%
-ds.where(
-    (sample.latitude < 44) & (sample.latitude > 36) & 
-    (sample.longitude > 0) & (sample.longitude < 25)
-).resample({'time': 'D'}).mean().swh.plot(col='time', col_wrap=4)
-
-# %% [markdown]
-# ### Using `where` with a custom fill value
-
-# %% [markdown]
-# `.where()` can take a second argument, which, if supplied, defines a fill value for the masked region. Below we fill masked regions with a constant `0`:
-
-# %%
-ds.swh.where(ds.swh>1, 0).resample({'time': 'D'}).mean().plot(col='time', col_wrap=4)
-
-# %%
-xr.where(ds.swh>1, ds.swh+4, 0).resample({'time': 'D'}).mean().plot(col='time', col_wrap=4)
-
 
 # %% [markdown]
 # ---
